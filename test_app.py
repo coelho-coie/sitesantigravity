@@ -91,6 +91,57 @@ class CastelosRuinasTestCase(unittest.TestCase):
         self.assertEqual(status_resp.status_code, 200)
         self.assertEqual(missao_criada["status"], "Concluída")
 
+    def test_cadastro_page_render(self):
+        """Verifica se a página de cadastro renderiza com status HTTP 200."""
+        response = self.client.get("/cadastro")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Registro de Guardião".encode("utf-8"), response.data)
+
+    def test_cadastro_successful_and_login(self):
+        """Testa o cadastro bem-sucedido de um novo guardião e posterior login."""
+        # Cadastro de novo usuário
+        response = self.client.post(
+            "/cadastro",
+            data={
+                "name": "Sir Lancelot",
+                "username": "lancelot_cavaleiro",
+                "email": "lancelot@castelos.reino.br",
+                "role": "Guardião de Muralhas",
+                "password": "senha_forte_123",
+                "confirm_password": "senha_forte_123",
+            },
+            follow_redirects=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Registro nobiliárquico selado com sucesso".encode("utf-8"), response.data)
+        self.assertIn("lancelot_cavaleiro", USERS_DB)
+
+        # Login com as novas credenciais cadastradas
+        login_resp = self.client.post(
+            "/login",
+            data={"username": "lancelot_cavaleiro", "password": "senha_forte_123"},
+            follow_redirects=True,
+        )
+        self.assertEqual(login_resp.status_code, 200)
+        self.assertIn("Salão Estratégico".encode("utf-8"), login_resp.data)
+
+    def test_cadastro_password_mismatch(self):
+        """Valida que senhas divergentes são rejeitadas no cadastro."""
+        response = self.client.post(
+            "/cadastro",
+            data={
+                "name": "Guardião Teste",
+                "username": "guardiao_teste",
+                "email": "teste@reino.com",
+                "role": "Mestre Arquiteto",
+                "password": "senha_um_123",
+                "confirm_password": "senha_dois_456",
+            },
+            follow_redirects=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("As chaves de acesso informadas não coincidem".encode("utf-8"), response.data)
+
 
 if __name__ == "__main__":
     unittest.main()
