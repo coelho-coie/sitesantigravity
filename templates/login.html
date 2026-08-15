@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Portão da Fortaleza - Castelos & Ruínas{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center py-4">
+    <div class="col-12 col-md-8 col-lg-5">
+        <!-- Card do Portão do Castelo -->
+        <div class="glass-card p-4 p-md-5 animate-fade-in border-warning border-opacity-50">
+            <div class="text-center mb-4">
+                <div class="brand-icon-castle mx-auto mb-3" style="width: 58px; height: 58px; font-size: 1.7rem;">
+                    <i class="bi bi-shield-lock-fill"></i>
+                </div>
+                <h2 class="fw-bold text-white mb-1">Portão da Fortaleza</h2>
+                <p class="text-secondary small">Apresente seu brasão e chave de acesso para entrar na cidadela</p>
+            </div>
+
+            <!-- Formulário de Autenticação -->
+            <form method="POST" action="{{ url_for('login') }}" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="username" class="form-label text-secondary small fw-semibold">
+                        <i class="bi bi-person-badge-fill me-1 text-warning"></i> Guardião / Identificador Nobre
+                    </label>
+                    <input 
+                        type="text" 
+                        class="form-control form-control-custom" 
+                        id="username" 
+                        name="username" 
+                        placeholder="Ex: admin ou dev_vitor"
+                        required 
+                        autofocus
+                    >
+                    <div class="invalid-feedback">Por favor, informe seu título de guardião.</div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label for="password" class="form-label text-secondary small fw-semibold mb-0">
+                            <i class="bi bi-key-fill me-1 text-warning"></i> Chave Secreta
+                        </label>
+                        <span class="text-muted small">Criptografia Arcano-Digital</span>
+                    </div>
+                    <div class="input-group">
+                        <input 
+                            type="password" 
+                            class="form-control form-control-custom" 
+                            id="password" 
+                            name="password" 
+                            placeholder="Digite sua chave de acesso"
+                            required
+                        >
+                        <button class="btn btn-secondary-custom" type="button" id="togglePassword" title="Exibir/Ocultar Chave">
+                            <i class="bi bi-eye text-warning" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                    <div class="invalid-feedback">Por favor, informe sua chave de acesso.</div>
+                </div>
+
+                <button type="submit" class="btn btn-primary-custom w-100 py-2 fs-6 mb-3">
+                    <i class="bi bi-door-open-fill me-2"></i> Adentrar ao Castelo
+                </button>
+            </form>
+
+            <hr class="border-secondary my-4">
+
+            <!-- Guardiões Pré-cadastrados para Teste Imediato -->
+            <div class="mt-3">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="text-warning small fw-bold text-uppercase" style="letter-spacing: 0.05em;">
+                        <i class="bi bi-award-fill me-1"></i> Guardiões do Reino (Teste Rápido)
+                    </span>
+                    <span class="badge bg-warning-subtle text-warning small">Clique para preencher</span>
+                </div>
+                <div class="row g-2">
+                    <div class="col-12">
+                        <div class="user-test-card" onclick="fillCredentials('admin', 'admin123')">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong class="text-white small d-block">1. Lorde Comandante Eldor</strong>
+                                    <span class="text-muted small">Login: <code class="text-warning">admin</code> | Chave: <code class="text-warning">admin123</code></span>
+                                </div>
+                                <span class="badge bg-warning text-dark fw-bold">Comandante</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="user-test-card" onclick="fillCredentials('dev_vitor', 'senha123')">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong class="text-white small d-block">2. Vitor, Mestre Arquiteto</strong>
+                                    <span class="text-muted small">Login: <code class="text-warning">dev_vitor</code> | Chave: <code class="text-warning">senha123</code></span>
+                                </div>
+                                <span class="badge bg-info text-dark fw-bold">Arquiteto</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="user-test-card" onclick="fillCredentials('qa_maria', 'teste123')">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong class="text-white small d-block">3. Maria, Guardiã das Ruínas</strong>
+                                    <span class="text-muted small">Login: <code class="text-warning">qa_maria</code> | Chave: <code class="text-warning">teste123</code></span>
+                                </div>
+                                <span class="badge bg-success fw-bold">Exploradora</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function fillCredentials(user, pass) {
+        document.getElementById('username').value = user;
+        document.getElementById('password').value = pass;
+    }
+
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.classList.replace('bi-eye', 'bi-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.classList.replace('bi-eye-slash', 'bi-eye');
+        }
+    });
+
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+{% endblock %}

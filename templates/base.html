@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Castelos & Ruínas - Guardião do Reino{% endblock %}</title>
+    <!-- Google Fonts: Cinzel (Medieval) e Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- CSS Customizado: Tema Castelos e Ruínas -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Barra de Navegação do Castelo -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <div class="brand-icon-castle">
+                    <i class="bi bi-shield-shaded"></i>
+                </div>
+                <div>
+                    <span class="brand-title">Castelos & Ruínas</span>
+                </div>
+            </a>
+            <button class="navbar-toggler text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="bi bi-list fs-2 text-warning"></i>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}">
+                            <i class="bi bi-compass me-1 text-warning"></i> Início
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">
+                            <i class="bi bi-bank me-1 text-warning"></i> Salão Estratégico
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'tarefas' %}active{% endif %}" href="{{ url_for('tarefas') }}">
+                            <i class="bi bi-scroll me-1 text-warning"></i> Missões & Ruínas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'perfil' %}active{% endif %}" href="{{ url_for('perfil') }}">
+                            <i class="bi bi-person-badge me-1 text-warning"></i> Registro do Guardião
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'sobre' %}active{% endif %}" href="{{ url_for('sobre') }}">
+                            <i class="bi bi-book me-1 text-warning"></i> Crônicas
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-2">
+                    {% if session.get('user') %}
+                        <div class="dropdown">
+                            <button class="btn btn-secondary-custom dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-shield-check text-warning"></i>
+                                <span>{{ session.get('user').get('name', 'Guardião') }}</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-lg border-warning border-opacity-25" style="background: #131b2e;">
+                                <li>
+                                    <div class="dropdown-header text-muted">
+                                        <small class="text-warning-emphasis">{{ session.get('user').get('email') }}</small><br>
+                                        <span class="badge bg-warning text-dark mt-1 fw-bold">{{ session.get('user').get('role') }}</span>
+                                    </div>
+                                </li>
+                                <li><hr class="dropdown-divider border-secondary"></li>
+                                <li><a class="dropdown-item" href="{{ url_for('perfil') }}"><i class="bi bi-award me-2 text-warning"></i> Meu Registro</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('tarefas') }}"><i class="bi bi-geo-alt me-2 text-info"></i> Minhas Expedições</a></li>
+                                <li><hr class="dropdown-divider border-secondary"></li>
+                                <li><a class="dropdown-item text-danger" href="{{ url_for('logout') }}"><i class="bi bi-door-closed me-2"></i> Deixar a Fortaleza</a></li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="btn btn-primary-custom d-flex align-items-center gap-1">
+                            <i class="bi bi-key-fill"></i>
+                            <span>Portão da Fortaleza</span>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Feedback / Mensagens dos Sentinelas (Flash) -->
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show glass-card border-warning border-opacity-25 mb-3" role="alert">
+                        <div class="d-flex align-items-center gap-2">
+                            {% if category == 'success' %}
+                                <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                            {% elif category == 'error' or category == 'danger' %}
+                                <i class="bi bi-exclamation-octagon-fill text-danger fs-5"></i>
+                            {% elif category == 'warning' %}
+                                <i class="bi bi-shield-exclamation text-warning fs-5"></i>
+                            {% else %}
+                                <i class="bi bi-info-circle-fill text-info fs-5"></i>
+                            {% endif %}
+                            <div>{{ message }}</div>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Conteúdo Principal do Castelo -->
+    <main class="flex-grow-1 py-4">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Rodapé Imperial -->
+    <footer class="footer-custom">
+        <div class="container">
+            <div class="row align-items-center gy-3">
+                <div class="col-md-6 text-center text-md-start">
+                    <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-1">
+                        <i class="bi bi-shield-shaded text-warning fs-5"></i>
+                        <strong class="text-white brand-title">Castelos & Ruínas</strong>
+                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">Era 2026</span>
+                    </div>
+                    <p class="mb-0 text-muted small">Catálogo de Fortalezas, Restauração de Castelos e Mapeamento de Ruínas Antigas.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="d-flex justify-content-center justify-content-md-end gap-3 mb-1">
+                        <a href="{{ url_for('home') }}" class="text-decoration-none text-muted">Início</a>
+                        <a href="{{ url_for('dashboard') }}" class="text-decoration-none text-muted">Salão Estratégico</a>
+                        <a href="{{ url_for('tarefas') }}" class="text-decoration-none text-muted">Missões</a>
+                        <a href="{{ url_for('sobre') }}" class="text-decoration-none text-muted">Crônicas</a>
+                    </div>
+                    <small class="text-muted">Engenharia de Software com Flask & Antigravity • Padrões PEP8 & PEP257</small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5.3 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

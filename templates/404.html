@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Ruínas Perdidas na Bruma (404) - Castelos & Ruínas{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center py-5 font-sans">
+    <div class="col-md-7 col-lg-5 text-center">
+        <div class="glass-card p-5 animate-fade-in border-warning border-opacity-50">
+            <div class="brand-icon-castle mx-auto mb-3" style="width: 76px; height: 76px; font-size: 2.2rem; background: linear-gradient(135deg, #b45309, #ef4444);">
+                <i class="bi bi-compass"></i>
+            </div>
+            <h1 class="display-3 fw-bold text-white mb-2 brand-title">404</h1>
+            <h4 class="fw-bold text-warning mb-2 brand-title">Ruínas Perdidas na Bruma</h4>
+            <p class="text-secondary small mb-4">
+                O caminho que você buscou nas montanhas não existe ou ruiu há eras sob as pedras do tempo.
+            </p>
+            <div class="d-flex justify-content-center gap-2">
+                <a href="{{ url_for('home') }}" class="btn btn-primary-custom">
+                    <i class="bi bi-compass me-1"></i> Retornar ao Início
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary-custom">
+                    <i class="bi bi-bank me-1"></i> Salão Estratégico
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
