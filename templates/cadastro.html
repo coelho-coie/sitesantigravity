@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}Registro de Guardião - Castelos & Ruínas{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center py-4">
+    <div class="col-12 col-md-10 col-lg-6">
+        <!-- Card do Registro de Guardião -->
+        <div class="glass-card p-4 p-md-5 animate-fade-in border-warning border-opacity-50">
+            <div class="text-center mb-4">
+                <div class="brand-icon-castle mx-auto mb-3" style="width: 58px; height: 58px; font-size: 1.7rem;">
+                    <i class="bi bi-person-plus-fill"></i>
+                </div>
+                <h2 class="fw-bold text-white mb-1">Registro de Guardião</h2>
+                <p class="text-secondary small">Inscreva seu nome nos anais do reino e receba sua credencial de acesso</p>
+            </div>
+
+            <!-- Formulário de Cadastro -->
+            <form method="POST" action="{{ url_for('cadastro') }}" class="needs-validation" novalidate>
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <label for="name" class="form-label text-secondary small fw-semibold">
+                            <i class="bi bi-card-heading text-warning me-1"></i> Nome Completo / Título Nobre *
+                        </label>
+                        <input 
+                            type="text" 
+                            class="form-control form-control-custom" 
+                            id="name" 
+                            name="name" 
+                            placeholder="Ex: Arthur, Cavaleiro de Valíria" 
+                            value="{{ name|default('') }}"
+                            required 
+                            maxlength="80"
+                        >
+                        <div class="invalid-feedback">Informe seu nome ou título nobre.</div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label for="username" class="form-label text-secondary small fw-semibold">
+                            <i class="bi bi-person-badge-fill text-warning me-1"></i> Identificador de Usuário *
+                        </label>
+                        <input 
+                            type="text" 
+                            class="form-control form-control-custom" 
+                            id="username" 
+                            name="username" 
+                            placeholder="Ex: arthur_rei" 
+                            value="{{ username|default('') }}"
+                            required 
+                            minlength="3"
+                            maxlength="30"
+                        >
+                        <div class="invalid-feedback">O usuário deve conter ao menos 3 caracteres.</div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label for="email" class="form-label text-secondary small fw-semibold">
+                            <i class="bi bi-envelope-paper-fill text-warning me-1"></i> Correio Real (E-mail) *
+                        </label>
+                        <input 
+                            type="email" 
+                            class="form-control form-control-custom" 
+                            id="email" 
+                            name="email" 
+                            placeholder="arthur@castelos.reino.br" 
+                            value="{{ email|default('') }}"
+                            required
+                        >
+                        <div class="invalid-feedback">Informe um correio eletrônico válido.</div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label for="role" class="form-label text-secondary small fw-semibold">
+                            <i class="bi bi-shield-shaded text-warning me-1"></i> Ofício / Função no Reino
+                        </label>
+                        <select class="form-select form-select-custom" id="role" name="role">
+                            <option value="Guardião de Muralhas" {% if role == 'Guardião de Muralhas' %}selected{% endif %}>Guardião de Muralhas & Torres</option>
+                            <option value="Mestre Arquiteto" {% if role == 'Mestre Arquiteto' %}selected{% endif %}>Mestre Arquiteto e Engenheiro</option>
+                            <option value="Explorador de Ruínas" {% if role == 'Explorador de Ruínas' %}selected{% endif %}>Explorador de Ruínas & Catacumbas</option>
+                            <option value="Alquimista do Templo" {% if role == 'Alquimista do Templo' %}selected{% endif %}>Alquimista & Decifrador de Glifos</option>
+                            <option value="Comandante da Cidadela" {% if role == 'Comandante da Cidadela' %}selected{% endif %}>Comandante da Cidadela</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label for="password" class="form-label text-secondary small fw-semibold">
+                            <i class="bi bi-key-fill text-warning me-1"></i> Chave Secreta (Senha) *
+                        </label>
+                        <div class="input-group">
+                            <input 
+                                type="password" 
+                                class="form-control form-control-custom" 
+                                id="password" 
+                                name="password" 
+                                placeholder="Mínimo 6 caracteres" 
+                                required 
+                                minlength="6"
+                            >
+                            <button class="btn btn-secondary-custom" type="button" id="toggleRegPassword" title="Exibir/Ocultar">
+                                <i class="bi bi-eye text-warning" id="regEyeIcon"></i>
+                            </button>
+                        </div>
+                        <div class="invalid-feedback">A chave deve ter no mínimo 6 caracteres.</div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label for="confirm_password" class="form-label text-secondary small fw-semibold">
+                            <i class="bi bi-check2-circle text-warning me-1"></i> Confirmar Chave Secreta *
+                        </label>
+                        <input 
+                            type="password" 
+                            class="form-control form-control-custom" 
+                            id="confirm_password" 
+                            name="confirm_password" 
+                            placeholder="Repita a chave secreta" 
+                            required 
+                            minlength="6"
+                        >
+                        <div class="invalid-feedback">Confirme a chave de acesso.</div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary-custom w-100 py-2 fs-6">
+                        <i class="bi bi-seal-fill me-2"></i> Selar Registro de Guardião
+                    </button>
+                </div>
+            </form>
+
+            <hr class="border-secondary my-4">
+
+            <!-- Link de Retorno ao Login -->
+            <div class="text-center font-sans">
+                <p class="text-secondary small mb-2">Já possui um título e brasão registrados?</p>
+                <a href="{{ url_for('login') }}" class="btn btn-secondary-custom w-100 py-2 d-flex align-items-center justify-content-center gap-2">
+                    <i class="bi bi-door-open text-warning"></i>
+                    <span>Entrar no Portão da Fortaleza</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('toggleRegPassword').addEventListener('click', function () {
+        const passwordInput = document.getElementById('password');
+        const confirmInput = document.getElementById('confirm_password');
+        const eyeIcon = document.getElementById('regEyeIcon');
+        const isPassword = passwordInput.type === 'password';
+        
+        passwordInput.type = isPassword ? 'text' : 'password';
+        confirmInput.type = isPassword ? 'text' : 'password';
+        
+        if (isPassword) {
+            eyeIcon.classList.replace('bi-eye', 'bi-eye-slash');
+        } else {
+            eyeIcon.classList.replace('bi-eye-slash', 'bi-eye');
+        }
+    });
+
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                var password = document.getElementById('password').value;
+                var confirmPassword = document.getElementById('confirm_password').value;
+                
+                if (password !== confirmPassword) {
+                    document.getElementById('confirm_password').setCustomValidity('As chaves não coincidem');
+                } else {
+                    document.getElementById('confirm_password').setCustomValidity('');
+                }
+
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+{% endblock %}

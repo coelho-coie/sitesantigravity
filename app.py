@@ -245,6 +245,100 @@ def login() -> Any:
     return render_template("login.html")
 
 
+@app.route("/cadastro", methods=["GET", "POST"])
+def cadastro() -> Any:
+    """Renderiza o registro de novos guardiões e processa a criação da conta.
+
+    Returns:
+        Response: Template HTML do formulário de cadastro ou redirecionamento.
+    """
+    if "user" in session:
+        return redirect(url_for("dashboard"))
+
+    if request.method == "POST":
+        name = request.form.get("name", "").strip()
+        username = request.form.get("username", "").strip().lower()
+        email = request.form.get("email", "").strip().lower()
+        role = request.form.get("role", "Guardião Iniciante").strip()
+        password = request.form.get("password", "").strip()
+        confirm_password = request.form.get("confirm_password", "").strip()
+
+        if not name or not username or not email or not password or not confirm_password:
+            flash("Todos os campos do pergaminho de registro são obrigatórios.", "error")
+            return render_template(
+                "cadastro.html",
+                name=name,
+                username=username,
+                email=email,
+                role=role,
+            )
+
+        if len(username) < 3:
+            flash("O identificador de usuário deve possuir ao menos 3 caracteres.", "error")
+            return render_template(
+                "cadastro.html",
+                name=name,
+                username=username,
+                email=email,
+                role=role,
+            )
+
+        if len(password) < 6:
+            flash("A chave secreta deve conter ao menos 6 caracteres para garantir a proteção da fortaleza.", "error")
+            return render_template(
+                "cadastro.html",
+                name=name,
+                username=username,
+                email=email,
+                role=role,
+            )
+
+        if password != confirm_password:
+            flash("As chaves de acesso informadas não coincidem.", "error")
+            return render_template(
+                "cadastro.html",
+                name=name,
+                username=username,
+                email=email,
+                role=role,
+            )
+
+        if username in USERS_DB:
+            flash("Este identificador já pertence a outro guardião do reino. Escolha outro título.", "error")
+            return render_template(
+                "cadastro.html",
+                name=name,
+                email=email,
+                role=role,
+            )
+
+        if any(u.get("email", "").lower() == email for u in USERS_DB.values()):
+            flash("Este correio real já está registrado nos anais do castelo.", "error")
+            return render_template(
+                "cadastro.html",
+                name=name,
+                username=username,
+                role=role,
+            )
+
+        novo_id = max([u["id"] for u in USERS_DB.values()], default=0) + 1
+        USERS_DB[username] = {
+            "id": novo_id,
+            "username": username,
+            "name": name,
+            "email": email,
+            "password_hash": generate_password_hash(password),
+            "role": role or "Guardião da Cidadela",
+            "created_at": "Era Atual / 2026",
+        }
+
+        logger.info("Novo guardião registrado nos anais: %s (%s)", username, name)
+        flash(f"Registro nobiliárquico selado com sucesso! Bem-vindo(a), {name}. Apresente sua chave para entrar.", "success")
+        return redirect(url_for("login"))
+
+    return render_template("cadastro.html")
+
+
 @app.route("/logout")
 def logout() -> Any:
     """Encerra a sessão do guardião e fecha os portões da cidadela.

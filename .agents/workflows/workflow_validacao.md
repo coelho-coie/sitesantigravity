@@ -33,13 +33,10 @@ Este workflow define o protocolo sistemático para validação visual, funcional
 
 ---
 
-### Fluxo 2: Autenticação e Controle de Acesso
-- **URL**: `http://127.0.0.1:5000/login`
-- **Credenciais de Teste**:
-  - `admin` / `admin123` (Lorde Comandante Eldor)
-  - `dev_vitor` / `senha123` (Vitor, Mestre Arquiteto)
-  - `qa_maria` / `teste123` (Maria, Guardiã das Ruínas)
+### Fluxo 2: Cadastro, Autenticação e Controle de Acesso
+- **URLs**: `http://127.0.0.1:5000/login` e `http://127.0.0.1:5000/cadastro`
 - **Itens de Verificação**:
+  - [ ] **Novo Cadastro (`/cadastro`)**: Preenchimento de dados de guardião, validação de confirmação de senha, unicidade de identificador e redirecionamento para o login.
   - [ ] Tentativa de acesso a rota protegida sem login (deve redirecionar para `/login` com alerta flash).
   - [ ] Teste de credenciais incorretas (mensagem de erro amigável sem quebra da página).
   - [ ] Login bem-sucedido e redirecionamento automático para o `/dashboard`.
