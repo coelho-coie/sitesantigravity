@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}Salão Estratégico - Castelos & Ruínas{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3 animate-fade-in">
+    <div>
+        <h2 class="fw-bold text-white mb-1">
+            <i class="bi bi-bank text-warning me-2"></i> Salão Estratégico do Reino
+        </h2>
+        <p class="text-secondary small mb-0 font-sans">Acompanhamento geral de restaurações de castelos e expedições em ruínas ancestrais.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('tarefas') }}" class="btn btn-primary-custom">
+            <i class="bi bi-plus-circle me-1"></i> Nova Missão
+        </a>
+    </div>
+</div>
+
+<!-- KPIs das Fortalezas e Ruínas -->
+<div class="row g-3 mb-4 font-sans">
+    <div class="col-6 col-lg-3">
+        <div class="glass-card p-3 p-md-4">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-secondary small fw-semibold">Total de Missões</span>
+                    <h3 class="fw-bold text-white mt-1 mb-0">{{ stats.total }}</h3>
+                </div>
+                <div class="metric-icon-box" style="background: rgba(245, 158, 11, 0.15); color: var(--gold-primary);">
+                    <i class="bi bi-shield-fill"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+        <div class="glass-card p-3 p-md-4">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-secondary small fw-semibold">Aguardando</span>
+                    <h3 class="fw-bold text-warning mt-1 mb-0">{{ stats.pendentes }}</h3>
+                </div>
+                <div class="metric-icon-box" style="background: var(--ruin-warning-light); color: var(--ruin-warning);">
+                    <i class="bi bi-hourglass-top"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+        <div class="glass-card p-3 p-md-4">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-secondary small fw-semibold">Em Expedição</span>
+                    <h3 class="fw-bold text-info mt-1 mb-0">{{ stats.andamento }}</h3>
+                </div>
+                <div class="metric-icon-box" style="background: rgba(56, 189, 248, 0.15); color: var(--arcane-blue);">
+                    <i class="bi bi-compass-fill"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+        <div class="glass-card p-3 p-md-4">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-secondary small fw-semibold">Restauradas</span>
+                    <h3 class="fw-bold text-success mt-1 mb-0">{{ stats.concluidas }}</h3>
+                </div>
+                <div class="metric-icon-box" style="background: var(--ruin-success-light); color: var(--ruin-success);">
+                    <i class="bi bi-check-circle-fill"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Progresso do Reino e Distribuição de Periculosidade -->
+<div class="row g-4 mb-4 font-sans">
+    <div class="col-lg-7">
+        <div class="glass-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold text-white mb-0 brand-title">Taxa de Restauração & Conquista</h5>
+                <span class="badge bg-warning text-dark fs-6 fw-bold">{{ stats.taxa_conclusao }}%</span>
+            </div>
+            <div class="progress mb-3" style="height: 14px; background-color: var(--bg-stone-elevated); border-radius: var(--radius-full); border: 1px solid var(--border-stone);">
+                <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ stats.taxa_conclusao }}%;" aria-valuenow="{{ stats.taxa_conclusao }}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <p class="text-muted small mb-0">
+                <i class="bi bi-shield-check text-warning me-1"></i>
+                {{ stats.concluidas }} de {{ stats.total }} fortalezas e ruínas foram restauradas ou exploradas com sucesso.
+            </p>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="glass-card p-4 h-100">
+            <h5 class="fw-bold text-white mb-3 brand-title">Periculosidade & Prioridade</h5>
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="badge-status badge-alta"><i class="bi bi-fire"></i> Perigo Crítico / Alta</span>
+                    <span class="fw-bold text-white">{{ stats.prioridade_alta }} missões</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="badge-status badge-media"><i class="bi bi-flag"></i> Moderado / Média</span>
+                    <span class="fw-bold text-white">{{ stats.prioridade_media }} missões</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="badge-status badge-baixa"><i class="bi bi-dash"></i> Baixo Risco / Baixa</span>
+                    <span class="fw-bold text-white">{{ stats.prioridade_baixa }} missões</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabela de Últimas Expedições Registradas -->
+<div class="glass-card p-4 font-sans">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-white mb-0 brand-title">Expedições & Restaurações Recentes</h5>
+        <a href="{{ url_for('tarefas') }}" class="btn btn-sm btn-secondary-custom">
+            Ver Todas <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+    </div>
+
+    {% if ultimas_tarefas %}
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0" style="background: transparent;">
+                <thead>
+                    <tr class="text-warning small border-secondary">
+                        <th>Missão</th>
+                        <th>Fortaleza / Ruína</th>
+                        <th>Guardião</th>
+                        <th>Perigo</th>
+                        <th>Status</th>
+                        <th class="text-end">Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in ultimas_tarefas %}
+                    <tr class="border-secondary">
+                        <td class="text-white fw-semibold">{{ t.titulo }}</td>
+                        <td><span class="badge bg-secondary-subtle text-warning-emphasis small"><i class="bi bi-geo-alt me-1"></i>{{ t.local }}</span></td>
+                        <td><span class="text-secondary small">{{ t.responsavel }}</span></td>
+                        <td>
+                            {% if t.prioridade == 'Alta' %}
+                                <span class="badge-status badge-alta">Crítico</span>
+                            {% elif t.prioridade == 'Média' %}
+                                <span class="badge-status badge-media">Médio</span>
+                            {% else %}
+                                <span class="badge-status badge-baixa">Baixo</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if t.status == 'Concluída' %}
+                                <span class="badge-status badge-concluida"><i class="bi bi-check-circle"></i> Restaurada</span>
+                            {% elif t.status == 'Em Andamento' %}
+                                <span class="badge-status badge-andamento"><i class="bi bi-compass"></i> Expedição</span>
+                            {% else %}
+                                <span class="badge-status badge-pendente"><i class="bi bi-hourglass-top"></i> Aguardando</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <a href="{{ url_for('tarefas') }}" class="btn btn-sm btn-secondary-custom" title="Acessar Missão">
+                                <i class="bi bi-box-arrow-up-right"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="text-center py-4 text-muted">
+            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+            Nenhuma expedição registrada no reino ainda.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

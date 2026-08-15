@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Início - Castelos & Ruínas{% endblock %}
+
+{% block content %}
+<!-- Hero Section Medieval -->
+<div class="row align-items-center py-4 py-lg-5">
+    <div class="col-lg-7 text-center text-lg-start mb-4 mb-lg-0 animate-fade-in">
+        <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill bg-warning-subtle text-warning border border-warning-subtle">
+            <i class="bi bi-shield-shaded"></i>
+            <span class="small fw-semibold">Arquitetura de Fortalezas • Expedições Arcanas</span>
+        </div>
+        <h1 class="display-4 fw-extrabold text-white mb-3" style="letter-spacing: -0.02em;">
+            Preserve as <span class="text-transparent bg-clip-text" style="background: linear-gradient(135deg, #f59e0b, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Fortalezas Reais</span> e desvende as Ruínas Ancestrais.
+        </h1>
+        <p class="lead text-secondary mb-4" style="max-width: 620px; font-family: 'Inter', sans-serif;">
+            Um sistema nobre e imersivo para coordenar expedições arqueológicas, acompanhar obras de restauração em castelos medievais e catalogar os segredos dos sítios esquecidos.
+        </p>
+        <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-start gap-3">
+            {% if session.get('user') %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary-custom btn-lg">
+                    <i class="bi bi-bank me-2"></i> Salão Estratégico
+                </a>
+                <a href="{{ url_for('tarefas') }}" class="btn btn-secondary-custom btn-lg">
+                    <i class="bi bi-scroll me-2"></i> Quadro de Missões
+                </a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="btn btn-primary-custom btn-lg">
+                    <i class="bi bi-key-fill me-2"></i> Abrir Portão do Castelo
+                </a>
+                <a href="{{ url_for('sobre') }}" class="btn btn-secondary-custom btn-lg">
+                    <i class="bi bi-book-half me-2"></i> Ler as Crônicas
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="col-lg-5 text-center">
+        <div class="glass-card p-4 text-start border-warning border-opacity-50">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <span class="text-warning small fw-bold"><i class="bi bi-compass me-1"></i> EXPEDIÇÕES ATIVAS</span>
+                <span class="badge bg-success-subtle text-success border border-success-subtle">
+                    <i class="bi bi-fire me-1"></i> Tocha Acesa
+                </span>
+            </div>
+            <div class="d-flex flex-column gap-3 font-sans">
+                <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-stone);">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="text-white fw-semibold small">Catacumbas de Eldoria</span>
+                        <span class="badge-status badge-andamento">Em Expedição</span>
+                    </div>
+                    <div class="text-muted small">Guardiã: Maria • Ruínas Arcanas</div>
+                </div>
+
+                <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-stone);">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="text-white fw-semibold small">Pergaminhos do Templo Perdido</span>
+                        <span class="badge-status badge-pendente">Aguardando</span>
+                    </div>
+                    <div class="text-muted small">Local: Ruínas do Planalto • Prioridade Alta</div>
+                </div>
+
+                <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-stone);">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="text-white fw-semibold small">Torre Norte de Pedra-Alta</span>
+                        <span class="badge-status badge-concluida">Restaurada</span>
+                    </div>
+                    <div class="text-muted small">Arquiteto: Vitor • Fortaleza Segura</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pilares do Reino -->
+<div class="row g-4 py-4 mt-2">
+    <div class="col-md-4">
+        <div class="glass-card glass-card-interactive p-4 h-100">
+            <div class="brand-icon-castle mb-3">
+                <i class="bi bi-bricks"></i>
+            </div>
+            <h4 class="text-white fw-bold h5 mb-2">Restauração de Fortalezas</h4>
+            <p class="text-secondary small mb-0 font-sans">
+                Acompanhe o reforço de muralhas, pontes levadiças e torres de vigia em tempo real com relatórios estruturais de engenharia.
+            </p>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="glass-card glass-card-interactive p-4 h-100">
+            <div class="brand-icon-castle mb-3" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">
+                <i class="bi bi-geo-alt-fill"></i>
+            </div>
+            <h4 class="text-white fw-bold h5 mb-2">Mapeamento de Ruínas</h4>
+            <p class="text-secondary small mb-0 font-sans">
+                Localize sítios arqueológicos, santuários antigos e catacumbas esquecidas através de filtros por periculosidade e terreno.
+            </p>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="glass-card glass-card-interactive p-4 h-100">
+            <div class="brand-icon-castle mb-3" style="background: linear-gradient(135deg, #059669, #10b981);">
+                <i class="bi bi-shield-check"></i>
+            </div>
+            <h4 class="text-white fw-bold h5 mb-2">Hierarquia dos Guardiões</h4>
+            <p class="text-secondary small mb-0 font-sans">
+                Acesso segmentado por títulos nobiliárquicos: Comandantes do Reino, Mestres Arquitetos e Guardiões Exploradores.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

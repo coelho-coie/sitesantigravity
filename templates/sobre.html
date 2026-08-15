@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Crônicas & Arquitetura - Castelos & Ruínas{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center animate-fade-in py-2 font-sans">
+    <div class="col-lg-10">
+        <!-- Banner de Apresentação das Crônicas -->
+        <div class="glass-card p-4 p-md-5 mb-4 text-center border-warning border-opacity-50">
+            <div class="brand-icon-castle mx-auto mb-3" style="width: 68px; height: 68px; font-size: 2.2rem;">
+                <i class="bi bi-book-half"></i>
+            </div>
+            <h2 class="display-6 fw-bold text-white mb-2 brand-title">Crônicas de Castelos & Ruínas</h2>
+            <p class="lead text-secondary mx-auto" style="max-width: 720px;">
+                Uma plataforma de engenharia de software de alta performance construída em <strong>Python Flask</strong>, unindo o rigor técnico das boas práticas à atmosfera épica de preservação de fortalezas medievais e exploração de ruínas ancestrais.
+            </p>
+        </div>
+
+        <!-- Pilares Técnicos e Arcanos -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="metric-icon-box" style="background: rgba(245, 158, 11, 0.15); color: var(--gold-primary);">
+                            <i class="bi bi-cpu-fill"></i>
+                        </div>
+                        <h4 class="text-white fw-bold mb-0 h5 brand-title">Engenharia de Backend</h4>
+                    </div>
+                    <ul class="text-secondary small mb-0 ps-3">
+                        <li class="mb-2"><strong>Python 3 & Flask:</strong> Microframework robusto com rotas modulares e tipagem explícita.</li>
+                        <li class="mb-2"><strong>PEP8 & PEP257:</strong> Padrão de código e docstrings em português em todas as funções.</li>
+                        <li class="mb-2"><strong>Sessões com Hashes Criptográficos:</strong> Senhas protegidas com <code>werkzeug.security</code>.</li>
+                        <li class="mb-0"><strong>Padrão PRG (Post/Redirect/Get):</strong> Proteção contra submissão duplicada de pergaminhos.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="glass-card p-4 h-100">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="metric-icon-box" style="background: rgba(56, 189, 248, 0.15); color: var(--arcane-blue);">
+                            <i class="bi bi-palette-fill"></i>
+                        </div>
+                        <h4 class="text-white fw-bold mb-0 h5 brand-title">Design Medieval & Stone Glass</h4>
+                    </div>
+                    <ul class="text-secondary small mb-0 ps-3">
+                        <li class="mb-2"><strong>Design Tokens & CSS3:</strong> Paleta Obsidian Stone, Torch Gold e Runic Arcane.</li>
+                        <li class="mb-2"><strong>Tipografia Nobre:</strong> Google Fonts <em>Cinzel</em> para títulos e <em>Inter</em> para legibilidade.</li>
+                        <li class="mb-2"><strong>Responsividade Total:</strong> Grid adaptável para tablets, smartphones e monitores widescreen.</li>
+                        <li class="mb-0"><strong>Micro-interações:</strong> Brilho dourado e transições táteis em cartões e botões.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customizações Antigravity Integradas -->
+        <div class="glass-card p-4 p-md-5 mb-4">
+            <h4 class="fw-bold text-white mb-3 d-flex align-items-center gap-2 brand-title">
+                <i class="bi bi-shield-shaded text-warning"></i>
+                Ecossistema Antigravity no Projeto
+            </h4>
+            <p class="text-secondary small mb-4">
+                O projeto foi arquivado e desenvolvido com o apoio de <strong>Skills</strong> e <strong>Workflows</strong> especializados:
+            </p>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-stone);">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-warning text-dark fw-bold">Skill</span>
+                            <strong class="text-white small">skill_css</strong>
+                        </div>
+                        <p class="text-muted small mb-0">Diretrizes de arquitetura CSS3, design tokens, layout gótico-moderno e WCAG.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-stone);">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-warning text-dark fw-bold">Skill</span>
+                            <strong class="text-white small">skill_formularios</strong>
+                        </div>
+                        <p class="text-muted small mb-0">Validação em dupla camada (client/server), acessibilidade de inputs e feedbacks visuais.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-stone);">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-info text-dark fw-bold">Workflow</span>
+                            <strong class="text-white small">workflow_git</strong>
+                        </div>
+                        <p class="text-muted small mb-0">Padrão Conventional Commits (<code>feat</code>, <code>fix</code>, <code>docs</code>) e controle de versão seguro.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-stone);">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-info text-dark fw-bold">Workflow</span>
+                            <strong class="text-white small">workflow_debug</strong>
+                        </div>
+                        <p class="text-muted small mb-0">Logs estruturados com módulo <code>logging</code>, depurador Werkzeug e testes automatizados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chamada para Ação -->
+        <div class="glass-card p-4 text-center">
+            <h5 class="fw-bold text-white mb-2 brand-title">Pronto para assumir seu posto de sentinela?</h5>
+            <p class="text-secondary small mb-3">Explore o salão estratégico ou assuma novas missões de restauração.</p>
+            <div class="d-flex justify-content-center gap-2">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary-custom">
+                    <i class="bi bi-bank me-1"></i> Salão Estratégico
+                </a>
+                <a href="{{ url_for('tarefas') }}" class="btn btn-secondary-custom">
+                    <i class="bi bi-scroll me-1"></i> Quadro de Missões
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Registro do Guardião - Castelos & Ruínas{% endblock %}
+
+{% block content %}
+<div class="row g-4 animate-fade-in font-sans">
+    <!-- Coluna Lateral: Brasão do Guardião -->
+    <div class="col-lg-4">
+        <div class="glass-card p-4 text-center mb-4 border-warning border-opacity-50">
+            <div class="position-relative d-inline-block mb-3">
+                <div class="brand-icon-castle mx-auto" style="width: 88px; height: 88px; font-size: 2.8rem; border-radius: 50%;">
+                    <i class="bi bi-shield-shaded"></i>
+                </div>
+                <span class="position-absolute bottom-0 end-0 p-2 bg-success border border-dark rounded-circle" title="Sentinela Ativo"></span>
+            </div>
+
+            <h4 class="fw-bold text-white mb-1 brand-title">{{ session.get('user').get('name') }}</h4>
+            <p class="text-secondary small mb-2">{{ session.get('user').get('email') }}</p>
+            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-3 fw-bold">{{ session.get('user').get('role') }}</span>
+
+            <div class="border-top border-secondary pt-3 mt-2 text-start">
+                <div class="d-flex justify-content-between py-1">
+                    <span class="text-muted small">ID do Guardião:</span>
+                    <strong class="text-warning small">#{{ session.get('user').get('id') }}</strong>
+                </div>
+                <div class="d-flex justify-content-between py-1">
+                    <span class="text-muted small">Investidura no Reino:</span>
+                    <strong class="text-white small">{{ session.get('user').get('created_at', 'Era de Bronze / 2026') }}</strong>
+                </div>
+                <div class="d-flex justify-content-between py-1">
+                    <span class="text-muted small">Status de Honra:</span>
+                    <span class="text-success small fw-semibold"><i class="bi bi-patch-check-fill me-1"></i> Guardião Ativo</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estatísticas Individuais de Expedição -->
+        <div class="glass-card p-4">
+            <h5 class="fw-bold text-white mb-3 brand-title">Minhas Expedições & Obras</h5>
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex justify-content-between align-items-center p-2 rounded" style="background: rgba(255,255,255,0.03);">
+                    <span class="text-secondary small">Sob minha guarda:</span>
+                    <strong class="text-white">{{ user_stats.total }}</strong>
+                </div>
+                <div class="d-flex justify-content-between align-items-center p-2 rounded" style="background: rgba(255,255,255,0.03);">
+                    <span class="text-secondary small">Fortalezas Restauradas:</span>
+                    <strong class="text-success">{{ user_stats.concluidas }}</strong>
+                </div>
+                <div class="d-flex justify-content-between align-items-center p-2 rounded" style="background: rgba(255,255,255,0.03);">
+                    <span class="text-secondary small">Expedições Pendentes:</span>
+                    <strong class="text-warning">{{ user_stats.pendentes }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Coluna Principal: Pergaminho de Atualização do Guardião -->
+    <div class="col-lg-8">
+        <div class="glass-card p-4 p-md-5">
+            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom border-secondary pb-3">
+                <div>
+                    <h3 class="fw-bold text-white mb-1 brand-title">Registro Nobiliárquico</h3>
+                    <p class="text-secondary small mb-0">Atualize seu título, e-mail de correspondência real e encargos da cidadela.</p>
+                </div>
+                <i class="bi bi-feather fs-1 text-warning"></i>
+            </div>
+
+            <form method="POST" action="{{ url_for('atualizar_perfil') }}" class="needs-validation" novalidate>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label for="nome" class="form-label text-secondary small fw-semibold">Nome Nobre / Título Completo *</label>
+                        <input type="text" class="form-control form-control-custom" id="nome" name="nome" value="{{ session.get('user').get('name') }}" required>
+                        <div class="invalid-feedback">O nome nobre é obrigatório.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="email" class="form-label text-secondary small fw-semibold">Correio Real (E-mail) *</label>
+                        <input type="email" class="form-control form-control-custom" id="email" name="email" value="{{ session.get('user').get('email') }}" required>
+                        <div class="invalid-feedback">Informe um e-mail válido.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="cargo" class="form-label text-secondary small fw-semibold">Cargo na Cidadela / Ordem *</label>
+                        <input type="text" class="form-control form-control-custom" id="cargo" name="cargo" value="{{ session.get('user').get('role') }}" required>
+                        <div class="invalid-feedback">Informe seu encargo ou função.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="username_display" class="form-label text-secondary small fw-semibold">Identificador de Sentinela (Login)</label>
+                        <input type="text" class="form-control form-control-custom" id="username_display" value="{{ session.get('user').get('username') }}" disabled>
+                        <div class="form-text text-muted">O identificador de guarda é imutável.</div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h5 class="fw-bold text-white mb-3 brand-title">Corvos-Mensageiros & Alertas</h5>
+                    <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" id="notifEmail" checked>
+                        <label class="form-check-label text-secondary small" for="notifEmail">Receber mensagem via corvo quando uma nova ruína for atribuída</label>
+                    </div>
+                    <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" id="notifPrazo" checked>
+                        <label class="form-check-label text-secondary small" for="notifPrazo">Alertas de proximidade de solstício (prazos de entrega)</label>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="reset" class="btn btn-secondary-custom">Redefinir</button>
+                    <button type="submit" class="btn btn-primary-custom">
+                        <i class="bi bi-floppy-fill me-1"></i> Selar Alterações
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+{% endblock %}
