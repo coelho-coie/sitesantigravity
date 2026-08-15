@@ -1,9 +1,18 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Castelos & Ruínas - Guardião do Reino{% endblock %}</title>
+    
+    <!-- Script de Inicialização Rápida de Tema (Evita Flash de Tema Incorreto) -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('castelos-theme') || 'dark';
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        })();
+    </script>
+
     <!-- Google Fonts: Cinzel (Medieval) e Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,8 +37,9 @@
                     <span class="brand-title">Castelos & Ruínas</span>
                 </div>
             </a>
-            <button class="navbar-toggler text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="bi bi-list fs-2 text-warning"></i>
+            
+            <button class="navbar-toggler text-warning border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="bi bi-list fs-2"></i>
             </button>
             
             <div class="collapse navbar-collapse" id="navbarMain">
@@ -62,13 +72,19 @@
                 </ul>
 
                 <div class="d-flex align-items-center gap-2">
+                    <!-- Alternador de Tema: Obsidiana (Escuro) / Pergaminho (Claro Suave) -->
+                    <button id="themeToggleBtn" type="button" class="btn-theme-toggle" title="Alternar entre Tema Escuro (Tocha) e Tema Claro (Pergaminho)">
+                        <i id="themeIcon" class="bi bi-moon-stars-fill"></i>
+                        <span id="themeLabel" class="d-none d-sm-inline small">Obsidiana</span>
+                    </button>
+
                     {% if session.get('user') %}
                         <div class="dropdown">
                             <button class="btn btn-secondary-custom dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-shield-check text-warning"></i>
                                 <span>{{ session.get('user').get('name', 'Guardião') }}</span>
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow-lg border-warning border-opacity-25" style="background: #131b2e;">
+                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-warning border-opacity-25">
                                 <li>
                                     <div class="dropdown-header text-muted">
                                         <small class="text-warning-emphasis">{{ session.get('user').get('email') }}</small><br>
@@ -132,7 +148,7 @@
                 <div class="col-md-6 text-center text-md-start">
                     <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mb-1">
                         <i class="bi bi-shield-shaded text-warning fs-5"></i>
-                        <strong class="text-white brand-title">Castelos & Ruínas</strong>
+                        <strong class="brand-title">Castelos & Ruínas</strong>
                         <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">Era 2026</span>
                     </div>
                     <p class="mb-0 text-muted small">Catálogo de Fortalezas, Restauração de Castelos e Mapeamento de Ruínas Antigas.</p>
@@ -152,6 +168,38 @@
 
     <!-- Bootstrap 5.3 Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Script de Alternância de Tema Dinâmica -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('themeToggleBtn');
+            const themeIcon = document.getElementById('themeIcon');
+            const themeLabel = document.getElementById('themeLabel');
+            
+            function updateThemeUI(theme) {
+                if (theme === 'light') {
+                    document.documentElement.setAttribute('data-bs-theme', 'light');
+                    if (themeIcon) themeIcon.className = 'bi bi-sun-fill text-warning';
+                    if (themeLabel) themeLabel.textContent = 'Pergaminho';
+                } else {
+                    document.documentElement.setAttribute('data-bs-theme', 'dark');
+                    if (themeIcon) themeIcon.className = 'bi bi-moon-stars-fill text-warning';
+                    if (themeLabel) themeLabel.textContent = 'Obsidiana';
+                }
+            }
+
+            const currentTheme = localStorage.getItem('castelos-theme') || 'dark';
+            updateThemeUI(currentTheme);
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function() {
+                    const activeTheme = document.documentElement.getAttribute('data-bs-theme') === 'light' ? 'dark' : 'light';
+                    localStorage.setItem('castelos-theme', activeTheme);
+                    updateThemeUI(activeTheme);
+                });
+            }
+        });
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

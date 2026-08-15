@@ -1,20 +1,23 @@
 /* ==========================================================================
    Castelos & Ruínas - Sistema de Gerenciamento de Fortalezas e Expedições
-   Tema: Castelos Medievais, Fortalezas e Ruínas Antigas (Gothic Stone & Torch Gold)
+   Tema: Castelos Medievais, Fortalezas e Ruínas Antigas
+   Paletas: Obsidiana & Tocha Dourada (Dark) | Pergaminho Nobre & Arenito (Light)
    ========================================================================== */
 
-/* Design Tokens & Variáveis do Tema Medieval / Ruínas */
-:root {
+/* --------------------------------------------------------------------------
+   1. Design Tokens: Modo Escuro (Obsidiana Sombria & Ouro de Tocha) - Padrão
+   -------------------------------------------------------------------------- */
+:root, [data-bs-theme="dark"] {
     /* Cores Primárias: Ouro de Tocha, Âmbar Antigo e Bronze */
     --gold-primary: #f59e0b;
     --gold-hover: #d97706;
-    --gold-glow: rgba(245, 158, 11, 0.35);
+    --gold-glow: rgba(245, 158, 11, 0.3);
     --gold-light: rgba(245, 158, 11, 0.12);
 
     /* Magia Rúnica / Ruínas Antigas: Azul Etéreo & Ciano Arcano */
     --arcane-blue: #38bdf8;
     --arcane-indigo: #818cf8;
-    --arcane-glow: rgba(56, 189, 248, 0.3);
+    --arcane-glow: rgba(56, 189, 248, 0.25);
 
     /* Status e Alertas Medievais */
     --ruin-success: #10b981;
@@ -25,20 +28,24 @@
     --ruin-danger-light: rgba(239, 68, 68, 0.14);
 
     /* Superfícies de Pedra Vulcânica & Ardósia Sombria */
-    --bg-castle: #0b0f19;
+    --bg-castle: #0c101a;
+    --bg-castle-subtle: #080c14;
     --bg-stone: #131b2e;
-    --bg-stone-elevated: #1e293b;
+    --bg-stone-elevated: #1a243a;
     --bg-stone-glass: rgba(19, 27, 46, 0.88);
+    --bg-navbar: rgba(12, 16, 26, 0.94);
+    --bg-footer: rgba(8, 12, 20, 0.98);
     
-    /* Tipografia e Textos */
-    --text-primary: #f8fafc;
-    --text-parchment: #e2e8f0;
+    /* Tipografia e Textos (Marfim Suave & Pergaminho Confortável - Sem Branco Excessivo) */
+    --text-heading: #ece7df;
+    --text-primary: #e2ded5;
+    --text-parchment: #cbd5e1;
     --text-muted: #94a3b8;
     --text-stone: #64748b;
 
     /* Bordas de Pedra Talhada & Detalhes Dourados */
     --border-stone: rgba(255, 255, 255, 0.09);
-    --border-gold: rgba(245, 158, 11, 0.4);
+    --border-gold: rgba(245, 158, 11, 0.38);
     --border-arcane: rgba(56, 189, 248, 0.3);
 
     /* Raios e Sombras */
@@ -54,47 +61,129 @@
     --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Reset Base e Fundo Imersivo */
+/* --------------------------------------------------------------------------
+   2. Design Tokens: Modo Claro (Pergaminho Nobre, Arenito Quente & Tinta Nanquim)
+   Suave e descansado para os olhos — livre de brancos estéreis/ofuscantes.
+   -------------------------------------------------------------------------- */
+[data-bs-theme="light"] {
+    /* Cores Primárias: Ouro Bronze & Âmbar Envelhecido */
+    --gold-primary: #b45309;
+    --gold-hover: #92400e;
+    --gold-glow: rgba(180, 83, 9, 0.2);
+    --gold-light: rgba(180, 83, 9, 0.08);
+
+    /* Magia Rúnica / Ruínas no Pergaminho */
+    --arcane-blue: #0284c7;
+    --arcane-indigo: #4f46e5;
+    --arcane-glow: rgba(2, 132, 199, 0.2);
+
+    /* Status e Alertas Suaves */
+    --ruin-success: #047857;
+    --ruin-success-light: rgba(4, 120, 87, 0.12);
+    --ruin-warning: #b45309;
+    --ruin-warning-light: rgba(180, 83, 9, 0.12);
+    --ruin-danger: #b91c1c;
+    --ruin-danger-light: rgba(185, 28, 28, 0.12);
+
+    /* Superfícies de Arenito Dourado e Pergaminho Aveludado */
+    --bg-castle: #f5f0e6;
+    --bg-castle-subtle: #ece5d6;
+    --bg-stone: #ede6d6;
+    --bg-stone-elevated: #e4dac5;
+    --bg-stone-glass: rgba(237, 230, 214, 0.92);
+    --bg-navbar: rgba(240, 233, 220, 0.95);
+    --bg-footer: #e6ddcb;
+    
+    /* Tipografia e Textos: Tinta Nanquim Medieval & Carvão Quente */
+    --text-heading: #1e1b18;
+    --text-primary: #2d2824;
+    --text-parchment: #3d3730;
+    --text-muted: #5f5549;
+    --text-stone: #786e62;
+
+    /* Bordas de Pedra de Cantaria & Detalhes em Bronze */
+    --border-stone: rgba(70, 55, 35, 0.14);
+    --border-gold: rgba(180, 83, 9, 0.35);
+    --border-arcane: rgba(2, 132, 199, 0.3);
+
+    --shadow-castle: 0 8px 24px rgba(70, 50, 25, 0.08);
+    --shadow-gold: 0 4px 14px rgba(180, 83, 9, 0.15);
+    --shadow-arcane: 0 4px 14px rgba(2, 132, 199, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   3. Reset Base e Fundo Imersivo
+   -------------------------------------------------------------------------- */
 body {
     font-family: 'Cinzel', 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     background-color: var(--bg-castle);
     background-image: 
-        radial-gradient(circle at 15% 20%, rgba(245, 158, 11, 0.06) 0%, transparent 40%),
-        radial-gradient(circle at 85% 80%, rgba(56, 189, 248, 0.05) 0%, transparent 40%),
-        linear-gradient(to bottom, #0b0f19, #080c14);
+        radial-gradient(circle at 15% 20%, rgba(245, 158, 11, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(56, 189, 248, 0.04) 0%, transparent 40%),
+        linear-gradient(to bottom, var(--bg-castle), var(--bg-castle-subtle));
     color: var(--text-parchment);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Títulos com Estilo Medieval */
 h1, h2, h3, h4, h5, h6, .brand-title {
     font-family: 'Cinzel', serif, system-ui;
     letter-spacing: 0.03em;
+    color: var(--text-heading);
 }
 
-/* Barra de Navegação do Castelo */
+.font-sans {
+    font-family: 'Inter', system-ui, sans-serif !important;
+}
+
+/* Tratamento de Cores no Modo Claro para evitar contrastes ofuscantes */
+[data-bs-theme="light"] .text-white {
+    color: var(--text-heading) !important;
+}
+
+[data-bs-theme="light"] .text-secondary {
+    color: var(--text-muted) !important;
+}
+
+[data-bs-theme="light"] .btn-close-white {
+    filter: invert(0.8) grayscale(100%);
+}
+
+[data-bs-theme="dark"] .text-white {
+    color: var(--text-heading) !important;
+}
+
+[data-bs-theme="dark"] .text-secondary {
+    color: var(--text-parchment) !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. Barra de Navegação do Castelo
+   -------------------------------------------------------------------------- */
 .navbar-custom {
-    background: rgba(11, 15, 25, 0.92);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: var(--bg-navbar);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border-gold);
     position: sticky;
     top: 0;
     z-index: 1030;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    transition: var(--transition-smooth);
 }
 
 .navbar-brand {
     font-size: 1.35rem;
     font-weight: 700;
-    color: #ffffff !important;
+    color: var(--text-heading) !important;
     display: flex;
     align-items: center;
     gap: 0.65rem;
-    text-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+    text-shadow: 0 2px 8px var(--gold-glow);
 }
 
 .brand-icon-castle {
@@ -123,7 +212,7 @@ h1, h2, h3, h4, h5, h6, .brand-title {
 
 .nav-link:hover, .nav-link.active {
     color: var(--gold-primary) !important;
-    background-color: rgba(245, 158, 11, 0.08);
+    background-color: var(--gold-light);
 }
 
 .nav-link.active {
@@ -131,7 +220,33 @@ h1, h2, h3, h4, h5, h6, .brand-title {
     border-bottom: 2px solid var(--gold-primary);
 }
 
-/* Cartões de Pedra e Ruínas (Glassmorphism de Pedra) */
+/* Botão Alternador de Tema (Tocha / Pergaminho) */
+.btn-theme-toggle {
+    background: var(--bg-stone-elevated);
+    border: 1px solid var(--border-gold);
+    color: var(--gold-primary);
+    border-radius: var(--radius-full);
+    padding: 0.45rem 0.85rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: var(--transition-smooth);
+    cursor: pointer;
+}
+
+.btn-theme-toggle:hover {
+    background: var(--gold-light);
+    color: var(--gold-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-gold);
+}
+
+/* --------------------------------------------------------------------------
+   5. Cartões e Superfícies (Glassmorphism Medieval)
+   -------------------------------------------------------------------------- */
 .glass-card {
     background: var(--bg-stone-glass);
     backdrop-filter: blur(16px);
@@ -162,13 +277,15 @@ h1, h2, h3, h4, h5, h6, .brand-title {
 .glass-card-interactive:hover {
     transform: translateY(-4px);
     border-color: var(--gold-primary);
-    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.7), var(--shadow-gold);
+    box-shadow: var(--shadow-castle), var(--shadow-gold);
 }
 
-/* Botões do Reino */
+/* --------------------------------------------------------------------------
+   6. Botões do Reino
+   -------------------------------------------------------------------------- */
 .btn-primary-custom {
-    background: linear-gradient(135deg, #d97706, #f59e0b);
-    color: #ffffff;
+    background: linear-gradient(135deg, var(--gold-hover), var(--gold-primary));
+    color: #ffffff !important;
     border: 1px solid rgba(255, 255, 255, 0.2);
     font-weight: 700;
     font-family: 'Cinzel', serif;
@@ -176,19 +293,18 @@ h1, h2, h3, h4, h5, h6, .brand-title {
     border-radius: var(--radius-md);
     padding: 0.65rem 1.4rem;
     transition: var(--transition-smooth);
-    box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
+    box-shadow: 0 4px 15px var(--gold-glow);
 }
 
 .btn-primary-custom:hover {
-    background: linear-gradient(135deg, #b45309, #d97706);
-    color: #ffffff;
+    background: linear-gradient(135deg, #b45309, var(--gold-hover));
     transform: translateY(-2px);
-    box-shadow: 0 6px 22px rgba(245, 158, 11, 0.5);
+    box-shadow: 0 6px 22px var(--gold-glow);
 }
 
 .btn-secondary-custom {
     background: var(--bg-stone-elevated);
-    color: var(--text-parchment);
+    color: var(--text-heading) !important;
     border: 1px solid var(--border-stone);
     font-weight: 600;
     font-family: 'Inter', sans-serif;
@@ -198,12 +314,14 @@ h1, h2, h3, h4, h5, h6, .brand-title {
 }
 
 .btn-secondary-custom:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
+    background: var(--gold-light);
+    color: var(--gold-primary) !important;
     border-color: var(--border-gold);
 }
 
-/* Badges e Status de Expedição / Restauração */
+/* --------------------------------------------------------------------------
+   7. Badges e Status de Expedição / Restauração
+   -------------------------------------------------------------------------- */
 .badge-status {
     padding: 0.4rem 0.85rem;
     border-radius: var(--radius-full);
@@ -219,13 +337,13 @@ h1, h2, h3, h4, h5, h6, .brand-title {
 .badge-pendente {
     background-color: var(--ruin-warning-light);
     color: var(--gold-primary);
-    border: 1px solid rgba(245, 158, 11, 0.35);
+    border: 1px solid var(--border-gold);
 }
 
 .badge-andamento {
     background-color: rgba(56, 189, 248, 0.14);
     color: var(--arcane-blue);
-    border: 1px solid rgba(56, 189, 248, 0.35);
+    border: 1px solid var(--border-arcane);
 }
 
 .badge-concluida {
@@ -243,16 +361,18 @@ h1, h2, h3, h4, h5, h6, .brand-title {
 .badge-media {
     background-color: var(--ruin-warning-light);
     color: var(--gold-primary);
-    border: 1px solid rgba(245, 158, 11, 0.35);
+    border: 1px solid var(--border-gold);
 }
 
 .badge-baixa {
     background-color: rgba(148, 163, 184, 0.15);
     color: var(--text-muted);
-    border: 1px solid rgba(148, 163, 184, 0.2);
+    border: 1px solid var(--border-stone);
 }
 
-/* Inputs e Formulários */
+/* --------------------------------------------------------------------------
+   8. Inputs e Formulários
+   -------------------------------------------------------------------------- */
 .form-control-custom, .form-select-custom {
     background-color: var(--bg-stone);
     border: 1px solid var(--border-stone);
@@ -266,8 +386,8 @@ h1, h2, h3, h4, h5, h6, .brand-title {
 .form-control-custom:focus, .form-select-custom:focus {
     background-color: var(--bg-stone-elevated);
     border-color: var(--gold-primary);
-    color: #ffffff;
-    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25);
+    color: var(--text-heading);
+    box-shadow: 0 0 0 3px var(--gold-glow);
 }
 
 .form-control-custom::placeholder {
@@ -283,12 +403,12 @@ h1, h2, h3, h4, h5, h6, .brand-title {
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-stone);
 }
 
 /* Cartões de Guardiões (Usuários de Teste) */
 .user-test-card {
-    background: rgba(19, 27, 46, 0.75);
+    background: var(--bg-stone);
     border: 1px dashed var(--border-gold);
     border-radius: var(--radius-md);
     padding: 0.9rem;
@@ -297,23 +417,52 @@ h1, h2, h3, h4, h5, h6, .brand-title {
 }
 
 .user-test-card:hover {
-    background: rgba(245, 158, 11, 0.12);
+    background: var(--gold-light);
     border-color: var(--gold-primary);
     transform: translateY(-2px);
     box-shadow: var(--shadow-gold);
 }
 
-/* Rodapé do Castelo */
+/* --------------------------------------------------------------------------
+   9. Modais e Dropdowns
+   -------------------------------------------------------------------------- */
+.modal-content {
+    background-color: var(--bg-stone-glass);
+    border: 1px solid var(--border-gold);
+    color: var(--text-primary);
+}
+
+.dropdown-menu {
+    background-color: var(--bg-stone);
+    border: 1px solid var(--border-gold);
+    color: var(--text-primary);
+}
+
+.dropdown-item {
+    color: var(--text-parchment);
+}
+
+.dropdown-item:hover {
+    background-color: var(--gold-light);
+    color: var(--gold-primary);
+}
+
+/* --------------------------------------------------------------------------
+   10. Rodapé do Castelo
+   -------------------------------------------------------------------------- */
 .footer-custom {
     margin-top: auto;
-    background-color: rgba(8, 12, 20, 0.98);
+    background-color: var(--bg-footer);
     border-top: 1px solid var(--border-gold);
     color: var(--text-stone);
     font-size: 0.88rem;
     padding: 2rem 0;
+    transition: var(--transition-smooth);
 }
 
-/* Animações Sutis */
+/* --------------------------------------------------------------------------
+   11. Animações e Efeitos
+   -------------------------------------------------------------------------- */
 @keyframes ruinPulse {
     0%, 100% { opacity: 0.9; }
     50% { opacity: 0.4; }
