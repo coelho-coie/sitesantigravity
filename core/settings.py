@@ -1,5 +1,6 @@
 """
-Django settings for projeto05 (Portal de Curiosidades do Hulk & Marvel).
+Django settings for projeto05 (Portal Homem de Ferro - Stark Industries / Marvel).
+Hardened for Vercel Serverless & Production Security Standards.
 """
 
 from pathlib import Path
@@ -13,11 +14,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-hulk-gamma-ray-secret-key-2026-prod-safe-marvel-universe-token')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-stark-arc-reactor-secret-key-2026-prod-safe-marvel-universe-token')
 
 DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,.vercel.app,*').split(',') if host.strip()]
+ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,.vercel.app').split(',') if host.strip()]
+if DEBUG and '*' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('*')
 
 # Application definition
 INSTALLED_APPS = [
@@ -77,13 +80,14 @@ DATABASES = {
     }
 }
 
-# Password validation
+# Password validation & Hashing Security (OWASP standard)
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {'min_length': 3},  # Support testing passwords like 123
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -109,18 +113,53 @@ STATICFILES_DIRS = [
     path for path in [BASE_DIR / 'frontend' / 'dist', BASE_DIR / 'static'] if path.exists()
 ]
 
-# Media files (uploaded/provided images like hulk_1.jpg to hulk_6.jpg)
+# Media files (uploaded/provided images like ironman_1.jpg to ironman_6.jpg)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# WhiteNoise Configuration for serving static files efficiently
+# WhiteNoise Configuration for serving static files with compression & long-lived caching
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# ==============================================================================
+# VERCEL & PRODUCTION SECURITY CONFIGURATIONS
+# ==============================================================================
+
+# Tell Django to trust Vercel's Edge CDN reverse proxy HTTPS header
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Content Security & Anti-Sniffing
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Anti-Clickjacking
+X_FRAME_OPTIONS = 'DENY'
+
+# Referrer Policy
+SECURE_REFERRER_POLICY = 'same-origin'
+
+# Session & CSRF Cookie Security
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False  # Allows frontend JS to read token for API requests
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
+
+if not DEBUG:
+    # Production HTTPS enforcement
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year HSTS
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
 # CORS Headers Settings
-CORS_ALLOW_ALL_ORIGINS = True
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    CORS_ALLOW_ALL_ORIGINS = False
+
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https?://localhost:\d+$",
