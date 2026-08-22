@@ -1,0 +1,43 @@
+# Python / Virtualenv
+.venv/
+venv/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+collected_static/
+
+# Environment Variables
+.env
+.env.local
+
+# Node / React
+node_modules/
+frontend/node_modules/
+frontend/dist/
+dist/
+.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Vercel
+.vercel/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Media uploads (ignore actual heavy uploads if desired, but keep structure)
+# media/*.jpg
+# media/*.png
