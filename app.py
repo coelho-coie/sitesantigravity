@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get(
-    "SECRET_KEY", "castelos-e-ruinas-chave-secreta-2026"
+    "SECRET_KEY", ""
 )
 
 # ---------------------------------------------------------------------------
