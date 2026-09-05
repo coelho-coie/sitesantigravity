@@ -80,3 +80,9 @@ graphify-out/
 
 # Vercel Deployment Cache & Config
 .vercel/
+
+# Node e Dependências Frontend / Arquivos estáticos gerados
+node_modules/
+frontend/node_modules/
+frontend/dist/
+staticfiles/
