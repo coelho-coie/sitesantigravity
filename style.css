@@ -1,0 +1,1227 @@
+/* ==========================================================================
+   DUNGEON ROGUELIKE - DARK FANTASY DESIGN SYSTEM
+   Gothic Medieval Aesthetics, Forged Iron, Obsidian Stone & Crimson Energy
+   ========================================================================== */
+
+:root {
+  /* Surface & Background Palettes */
+  --bg-abyss: #050609;
+  --bg-deep: #090b10;
+  --bg-panel: #10141d;
+  --bg-panel-sheen: #151a26;
+  --bg-card: #161b27;
+  --bg-card-hover: #1f2637;
+  --bg-parchment: #0c0f16;
+
+  /* Stone, Forged Iron & Precious Metal Borders */
+  --border-subtle: #212638;
+  --border-iron: #353d54;
+  --border-iron-highlight: #4c5778;
+  --border-gold-antique: #856427;
+  --border-gold-bright: #d4af37;
+  --border-crimson-dark: #631218;
+  --border-crimson-bright: #b91c1c;
+
+  /* Accent Tones */
+  --gold-pure: #f59e0b;
+  --gold-radiant: #fbbf24;
+  --crimson-blood: #dc2626;
+  --crimson-radiant: #ef4444;
+  --green-emerald: #10b981;
+  --green-glow: #34d399;
+  --blue-mana: #38bdf8;
+  --purple-rune: #a855f7;
+
+  /* Typography Colors */
+  --text-main: #f8fafc;
+  --text-parchment: #e2e8f0;
+  --text-muted: #8b9bb4;
+  --text-dim: #505c75;
+
+  /* Fonts */
+  --font-gothic: 'Cinzel Decorative', 'Cinzel', serif;
+  --font-serif: 'Cinzel', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Elevations & Shadows */
+  --shadow-panel: 0 16px 36px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --shadow-altar: 0 0 45px rgba(0, 0, 0, 0.95), 0 0 25px rgba(245, 158, 11, 0.06);
+}
+
+/* Base Reset & Foundations */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-abyss);
+  background-image: 
+    radial-gradient(circle at 50% 10%, rgba(35, 45, 68, 0.22) 0%, transparent 60%),
+    radial-gradient(circle at 15% 85%, rgba(99, 18, 24, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 85% 85%, rgba(133, 100, 39, 0.12) 0%, transparent 50%);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 1460px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ==========================================================================
+   HEADER SECTION - GOTHIC MEDIEVAL CREST
+   ========================================================================== */
+
+.game-header {
+  background: linear-gradient(180deg, var(--bg-panel-sheen) 0%, var(--bg-panel) 100%);
+  border: 1px solid var(--border-subtle);
+  border-top: 1px solid var(--border-gold-antique);
+  border-radius: 8px;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-panel), inset 0 1px 0 rgba(212, 175, 55, 0.2);
+  position: relative;
+}
+
+.game-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-radiant), transparent);
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.icon-skull {
+  font-size: 1.6rem;
+  filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.5));
+}
+
+.title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-brand h1 {
+  font-family: var(--font-gothic);
+  font-size: 1.45rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: #fff;
+  background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.sub-brand {
+  font-family: var(--font-serif);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--border-gold-bright);
+}
+
+.badge-floor-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 8px;
+}
+
+.badge-floor-label {
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  font-weight: 700;
+}
+
+.badge-floor {
+  background: linear-gradient(135deg, #451a03 0%, #78350f 50%, #92400e 100%);
+  color: #fef08a;
+  font-family: var(--font-serif);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 3px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border-gold-bright);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.header-controls-hint {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.header-controls-hint kbd {
+  background: #1a202c;
+  border: 1px solid var(--border-iron);
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-main);
+  box-shadow: 0 2px 0 #0f131a;
+}
+
+.hint-sep {
+  color: var(--border-gold-antique);
+  font-size: 0.65rem;
+}
+
+/* ==========================================================================
+   MAIN DASHBOARD GRID (3 COLUMNS)
+   ========================================================================== */
+
+.game-layout {
+  display: grid;
+  grid-template-columns: 290px 1fr 330px;
+  gap: 18px;
+  align-items: stretch;
+}
+
+/* ==========================================================================
+   PANEL ARCHITECTURE (LEFT & RIGHT)
+   ========================================================================== */
+
+.panel {
+  background: linear-gradient(180deg, var(--bg-panel-sheen) 0%, var(--bg-panel) 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: var(--shadow-panel);
+  position: relative;
+}
+
+.panel-header-rune {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 8px;
+}
+
+.panel-tag {
+  font-family: var(--font-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--border-gold-bright);
+}
+
+.rune-symbol {
+  font-size: 0.85rem;
+  color: var(--border-gold-antique);
+  filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.4));
+}
+
+.panel-title {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ==========================================================================
+   LEFT PANEL - HERO SANCTUARY
+   ========================================================================== */
+
+/* Player Profile Card */
+.player-profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, var(--bg-card) 0%, #10131d 100%);
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-iron);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.avatar-box {
+  width: 48px;
+  height: 48px;
+  background: radial-gradient(circle, #252b3d 0%, #0d1017 100%);
+  border: 2px solid var(--border-gold-bright);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.35);
+}
+
+.avatar-char {
+  font-family: var(--font-mono);
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--gold-radiant);
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+  animation: heroPulse 3s infinite ease-in-out;
+}
+
+@keyframes heroPulse {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.06); filter: brightness(1.3); }
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.player-name {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.player-title {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* HP Blood Essence Section */
+.hp-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.stat-label {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 1px;
+}
+
+.hp-heart {
+  font-size: 0.8rem;
+  filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.7));
+}
+
+.stat-value {
+  color: #fca5a5;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.hp-bar-container {
+  width: 100%;
+  height: 18px;
+  background: #170709;
+  border: 1px solid var(--border-crimson-dark);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8), 0 0 10px rgba(220, 38, 38, 0.2);
+}
+
+.hp-bar-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #991b1b 0%, #dc2626 50%, #f87171 100%);
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.6);
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.hp-bar-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, transparent 50%, rgba(0, 0, 0, 0.2) 100%);
+  pointer-events: none;
+}
+
+/* MP Section (Final Fantasy Mana Points) */
+.mp-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mp-icon {
+  font-size: 0.8rem;
+  filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.8));
+}
+
+.mp-val {
+  color: #93c5fd;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.mp-bar-container {
+  width: 100%;
+  height: 14px;
+  background: #081122;
+  border: 1px solid #1e40af;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.8), 0 0 8px rgba(37, 99, 235, 0.25);
+}
+
+.mp-bar-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #1d4ed8 0%, #3b82f6 50%, #60a5fa 100%);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mp-bar-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Limit Break Section (Final Fantasy Style) */
+.limit-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.limit-icon {
+  font-size: 0.8rem;
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.8));
+}
+
+.limit-val {
+  color: #fde047;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.limit-bar-container {
+  width: 100%;
+  height: 14px;
+  background: #201306;
+  border: 1px solid #92400e;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.8), 0 0 8px rgba(245, 158, 11, 0.25);
+}
+
+.limit-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #b45309 0%, #f59e0b 50%, #fde047 100%);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.limit-bar-fill.limit-ready {
+  animation: limitReadyPulse 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes limitReadyPulse {
+  0% { filter: brightness(1) drop-shadow(0 0 4px #f59e0b); }
+  100% { filter: brightness(1.4) drop-shadow(0 0 16px #fde047); }
+}
+
+.limit-bar-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Stats Cards Grid (Carved Stone Look) */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.stat-card {
+  background: linear-gradient(145deg, var(--bg-card) 0%, #0e121a 100%);
+  border: 1px solid var(--border-iron);
+  border-radius: 6px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+  border-color: var(--border-iron-highlight);
+  transform: translateY(-1px);
+}
+
+.card-icon {
+  font-size: 1.15rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.card-label {
+  font-family: var(--font-serif);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-dim);
+  letter-spacing: 1.5px;
+}
+
+.card-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+/* D-Pad Tactical Virtual Compass */
+.dpad-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.dpad-label {
+  font-family: var(--font-serif);
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  font-weight: 700;
+}
+
+.dpad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: repeat(3, 48px);
+  gap: 6px;
+}
+
+.dpad-btn {
+  background: linear-gradient(135deg, #1b212f 0%, #11151f 100%);
+  color: var(--text-parchment);
+  border: 1px solid var(--border-iron);
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.12s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.dpad-btn:hover {
+  background: linear-gradient(135deg, #242c3d 0%, #181d2a 100%);
+  border-color: var(--border-gold-bright);
+  color: var(--gold-radiant);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.35);
+}
+
+.dpad-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  background: #0e121a;
+}
+
+.dpad-center {
+  color: var(--gold-pure);
+  font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   CENTER COLUMN - THE DUNGEON PORTAL (CANVAS FRAME)
+   ========================================================================== */
+
+.canvas-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.dungeon-altar-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-serif);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--border-gold-bright);
+  text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
+.altar-torch {
+  font-size: 0.9rem;
+  animation: torchFlicker 1.8s infinite alternate ease-in-out;
+}
+
+@keyframes torchFlicker {
+  0% { transform: scale(0.95); opacity: 0.85; filter: drop-shadow(0 0 4px #ea580c); }
+  50% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 12px #f59e0b); }
+  100% { transform: scale(1); opacity: 0.9; filter: drop-shadow(0 0 8px #f97316); }
+}
+
+.canvas-frame {
+  background: #030406;
+  padding: 6px;
+  border-radius: 8px;
+  border: 2px solid var(--border-iron);
+  box-shadow: var(--shadow-altar);
+  position: relative;
+}
+
+/* Corner Runic Ornaments */
+.frame-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border-gold-bright);
+  pointer-events: none;
+}
+
+.corner-tl { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+.corner-tr { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+.corner-bl { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+.corner-br { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+#gameCanvas {
+  display: block;
+  border-radius: 4px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background-color: #06070a;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9);
+}
+
+/* ==========================================================================
+   BOSS BAR MONUMENTAL (FINAL FANTASY BOSS ENCOUNTER)
+   ========================================================================== */
+
+.boss-bar-container {
+  width: 100%;
+  max-width: 800px;
+  background: linear-gradient(180deg, #2a0b16 0%, #12070c 100%);
+  border: 2px solid #b91c1c;
+  border-top: 2px solid #ef4444;
+  border-radius: 8px;
+  padding: 10px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 0 25px rgba(220, 38, 38, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: bossEntry 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-bottom: 6px;
+}
+
+@keyframes bossEntry {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.boss-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.boss-icon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 8px #ef4444);
+}
+
+.boss-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.boss-name {
+  font-family: var(--font-gothic);
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #fecaca;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
+}
+
+.boss-title {
+  font-family: var(--font-serif);
+  font-size: 0.68rem;
+  color: var(--border-gold-bright);
+  letter-spacing: 2px;
+}
+
+.boss-hp-text {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #fca5a5;
+  font-family: var(--font-mono);
+}
+
+.boss-hp-bar {
+  width: 100%;
+  height: 16px;
+  background: #24070a;
+  border: 1px solid #7f1d1d;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.boss-hp-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #7e22ce 0%, #a855f7 50%, #ec4899 100%);
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.8);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.boss-hp-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   FINAL FANTASY TACTICAL COMMAND BAR
+   ========================================================================== */
+
+.ff-command-bar {
+  width: 100%;
+  max-width: 812px;
+  background: linear-gradient(180deg, #0e1626 0%, #080c14 100%);
+  border: 2px solid #293854;
+  border-top: 2px solid #4a638e;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  margin-top: 4px;
+}
+
+.ff-bar-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #93c5fd;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 4px;
+}
+
+.ff-active-hint {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+.ff-commands-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.ff-cmd-btn {
+  background: linear-gradient(145deg, #131d30 0%, #090e18 100%);
+  border: 1px solid #2b3b57;
+  border-radius: 6px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--text-main);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.ff-cmd-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+}
+
+.ff-cmd-btn:active {
+  transform: translateY(1px);
+}
+
+.cmd-key kbd {
+  background: #1c273c;
+  border: 1px solid #3d5074;
+  border-radius: 3px;
+  font-size: 0.62rem;
+  padding: 1px 4px;
+  color: #bfdbfe;
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.cmd-icon {
+  font-size: 1.15rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.cmd-name {
+  font-family: var(--font-serif);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.cmd-cost {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  font-family: var(--font-mono);
+}
+
+/* Button color themes */
+.btn-attack:hover {
+  border-color: #60a5fa;
+  box-shadow: 0 0 12px rgba(96, 165, 250, 0.4);
+}
+.btn-attack .cmd-cost { color: #94a3b8; }
+
+.btn-fire:hover {
+  border-color: #f87171;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.5);
+}
+.btn-fire .cmd-name { color: #fca5a5; }
+.btn-fire .cmd-cost { color: #f87171; }
+
+.btn-ice:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.5);
+}
+.btn-ice .cmd-name { color: #7dd3fc; }
+.btn-ice .cmd-cost { color: #38bdf8; }
+
+.btn-thunder:hover {
+  border-color: #fde047;
+  box-shadow: 0 0 14px rgba(250, 204, 21, 0.5);
+}
+.btn-thunder .cmd-name { color: #fef08a; }
+.btn-thunder .cmd-cost { color: #facc15; }
+
+.btn-cure:hover {
+  border-color: #4ade80;
+  box-shadow: 0 0 14px rgba(74, 222, 128, 0.5);
+}
+.btn-cure .cmd-name { color: #86efac; }
+.btn-cure .cmd-cost { color: #4ade80; }
+
+.btn-defend:hover {
+  border-color: #a855f7;
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.5);
+}
+.btn-defend .cmd-cost { color: #93c5fd; }
+
+.btn-limit {
+  border-color: #854d0e;
+  background: linear-gradient(145deg, #241406 0%, #120a02 100%);
+}
+.btn-limit:hover {
+  border-color: #fbbf24;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.6);
+}
+.btn-limit .cmd-name { color: #fde047; }
+.btn-limit .cmd-cost { color: #f59e0b; }
+
+.btn-limit.ready {
+  border-color: #f59e0b;
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.7);
+  animation: limitBtnPulse 1.2s infinite alternate ease-in-out;
+}
+
+@keyframes limitBtnPulse {
+  0% { transform: scale(1); filter: brightness(1); }
+  100% { transform: scale(1.04); filter: brightness(1.3); }
+}
+
+/* ==========================================================================
+   RIGHT PANEL - CHRONICLES OF COMBAT & BESTIARY
+   ========================================================================== */
+
+.combat-log {
+  flex: 1;
+  min-height: 270px;
+  max-height: 380px;
+  overflow-y: auto;
+  background: var(--bg-parchment);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-iron) transparent;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.combat-log::-webkit-scrollbar {
+  width: 5px;
+}
+.combat-log::-webkit-scrollbar-thumb {
+  background: var(--border-iron);
+  border-radius: 4px;
+}
+
+.log-entry {
+  animation: fadeInLog 0.2s ease-in;
+  word-break: break-word;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.log-info {
+  color: var(--text-muted);
+}
+
+.log-player_hit {
+  color: var(--blue-mana);
+}
+
+.log-crit {
+  color: var(--gold-radiant);
+  font-weight: 700;
+  text-shadow: 0 0 6px rgba(251, 191, 36, 0.5);
+}
+
+.log-player_damaged {
+  color: var(--crimson-radiant);
+}
+
+.log-kill {
+  color: var(--green-glow);
+  font-weight: 700;
+}
+
+.log-heal {
+  color: #6ee7b7;
+}
+
+.log-chest {
+  color: var(--gold-pure);
+}
+
+.log-floor {
+  color: var(--purple-rune);
+  font-weight: 700;
+}
+
+.log-death {
+  color: var(--crimson-blood);
+  font-weight: 900;
+  text-shadow: 0 0 8px rgba(220, 38, 38, 0.8);
+}
+
+@keyframes fadeInLog {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Legend Section (Bestiary) */
+.legend-section {
+  background: linear-gradient(145deg, var(--bg-card) 0%, #0f121a 100%);
+  border: 1px solid var(--border-iron);
+  border-radius: 6px;
+  padding: 12px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.legend-title {
+  font-family: var(--font-serif);
+  font-size: 0.68rem;
+  color: var(--border-gold-bright);
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+  font-weight: 700;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 4px;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+  font-size: 0.74rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-parchment);
+}
+
+.legend-symbol {
+  font-family: var(--font-mono);
+  font-weight: 900;
+  width: 20px;
+  height: 20px;
+  background: #090b10;
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+}
+
+.sym-player { color: var(--gold-radiant); border-color: var(--border-gold-antique); }
+.sym-goblin { color: #4ade80; }
+.sym-skeleton { color: #f1f5f9; }
+.sym-ogre { color: #f87171; }
+.sym-potion { color: #f472b6; }
+.sym-chest { color: var(--gold-pure); }
+.sym-stairs { color: #38bdf8; }
+
+/* ==========================================================================
+   PERMADEATH MODAL (GAME OVER SCREEN)
+   ========================================================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 4, 7, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hidden,
+.modal-overlay.hidden {
+  display: none !important;
+}
+
+.modal-card {
+  background: linear-gradient(180deg, #1b090b 0%, #0d0f17 100%);
+  border: 2px solid var(--border-crimson-dark);
+  border-top: 2px solid var(--border-crimson-bright);
+  border-radius: 12px;
+  padding: 36px 44px;
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+  box-shadow: 0 0 60px rgba(220, 38, 38, 0.4), 0 20px 40px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  position: relative;
+}
+
+.modal-skull {
+  font-size: 3.8rem;
+  filter: drop-shadow(0 0 16px rgba(239, 68, 68, 0.8));
+  animation: skullHover 2.5s infinite ease-in-out;
+}
+
+@keyframes skullHover {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-6px) scale(1.08); }
+}
+
+.modal-title {
+  font-family: var(--font-gothic);
+  font-size: 1.65rem;
+  font-weight: 900;
+  color: #fca5a5;
+  letter-spacing: 2px;
+  text-shadow: 0 0 14px rgba(239, 68, 68, 0.6);
+}
+
+.modal-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.modal-stats {
+  width: 100%;
+  background: rgba(10, 13, 20, 0.8);
+  border: 1px solid var(--border-iron);
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 4px 0;
+  box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.7);
+}
+
+.modal-stat-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-parchment);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  padding-bottom: 4px;
+}
+
+.modal-stat-row strong {
+  color: var(--gold-radiant);
+  font-family: var(--font-mono);
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
+}
+
+.btn-primary {
+  width: 100%;
+  background: linear-gradient(135deg, #991b1b 0%, #b45309 50%, #d97706 100%);
+  color: #fff;
+  border: 1px solid var(--border-gold-bright);
+  border-radius: 6px;
+  padding: 14px 20px;
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #b91c1c 0%, #d97706 50%, #f59e0b 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(245, 158, 11, 0.6);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-rune {
+  font-size: 1rem;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN & BREAKPOINTS
+   ========================================================================== */
+
+@media (max-width: 1240px) {
+  .game-layout {
+    grid-template-columns: 260px 1fr 290px;
+    gap: 14px;
+  }
+  .header-controls-hint {
+    display: none;
+  }
+}
+
+@media (max-width: 1060px) {
+  .game-layout {
+    grid-template-columns: 1fr;
+  }
+  .canvas-wrapper {
+    order: 1;
+  }
+  .stats-panel {
+    order: 2;
+  }
+  .log-panel {
+    order: 3;
+  }
+  .canvas-frame {
+    width: 100%;
+    overflow-x: auto;
+    display: flex;
+    justify-content: center;
+  }
+}
