@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dungeon Roguelike - Crônicas da Masmorra Sombria</title>
+  <link rel="stylesheet" href="style.css?v=20260912_ff_v2">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@600;700;900&family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header Superior com Estilo Gótico Medieval -->
+    <header class="game-header">
+      <div class="header-brand">
+        <span class="icon-skull" aria-hidden="true">⚔️</span>
+        <div class="title-group">
+          <h1>DUNGEON ROGUELIKE</h1>
+          <span class="sub-brand">CRÔNICAS DO ABISMO &bull; FINAL FANTASY TACTICS EDITION</span>
+        </div>
+        <div class="badge-floor-container">
+          <span class="badge-floor-label">PROFUNDEZA</span>
+          <span class="badge-floor">ANDAR <span id="floorNum">1</span></span>
+        </div>
+      </div>
+      <div class="header-controls-hint">
+        <span class="hint-item"><kbd>WASD</kbd> Mover / Atacar</span>
+        <span class="hint-sep">❖</span>
+        <span class="hint-item"><kbd>1-4</kbd> Magias</span>
+        <span class="hint-sep">❖</span>
+        <span class="hint-item"><kbd>E</kbd> Defender</span>
+        <span class="hint-sep">❖</span>
+        <span class="hint-item"><kbd>L</kbd> Limite</span>
+      </div>
+    </header>
+
+    <main class="game-layout">
+      <!-- Painel Lateral Esquerdo: Status Heroico -->
+      <aside class="panel stats-panel">
+        <div class="panel-header-rune">
+          <span class="rune-symbol">ᚱ</span>
+          <span class="panel-tag">SANTUÁRIO DO HERÓI</span>
+          <span class="rune-symbol">ᛏ</span>
+        </div>
+
+        <div class="panel-section player-profile">
+          <div class="avatar-box">
+            <span class="avatar-char">@</span>
+            <div class="avatar-glow"></div>
+          </div>
+          <div class="player-info">
+            <h2 class="player-name">Cavaleiro Errante</h2>
+            <span class="player-title">Guerreiro da Luz</span>
+          </div>
+        </div>
+
+        <!-- Seção de Vida Carmesim Rúnica -->
+        <div class="panel-section hp-section">
+          <div class="stat-header">
+            <span class="stat-label"><span class="hp-heart">❤️</span> ESSÊNCIA VITAL (HP)</span>
+            <span id="hpText" class="stat-value">45 / 45</span>
+          </div>
+          <div class="hp-bar-container">
+            <div id="hpFill" class="hp-bar-fill"></div>
+            <div class="hp-bar-sheen"></div>
+          </div>
+        </div>
+
+        <!-- Seção de Mana / Poder Mágico (Final Fantasy MP) -->
+        <div class="panel-section mp-section">
+          <div class="stat-header">
+            <span class="stat-label"><span class="mp-icon">🔮</span> PONTOS DE MANA (MP)</span>
+            <span id="mpText" class="stat-value mp-val">30 / 30</span>
+          </div>
+          <div class="mp-bar-container">
+            <div id="mpFill" class="mp-bar-fill"></div>
+            <div class="mp-bar-sheen"></div>
+          </div>
+        </div>
+
+        <!-- Seção de Limit Break (Barra de Limite FF) -->
+        <div class="panel-section limit-section">
+          <div class="stat-header">
+            <span class="stat-label"><span class="limit-icon">⚡</span> LIMIT BREAK</span>
+            <span id="limitText" class="stat-value limit-val">0%</span>
+          </div>
+          <div class="limit-bar-container">
+            <div id="limitFill" class="limit-bar-fill"></div>
+            <div class="limit-bar-sheen"></div>
+          </div>
+        </div>
+
+        <!-- Grid de Atributos em Pedra Esculpida -->
+        <div class="panel-section stats-grid">
+          <div class="stat-card">
+            <div class="card-glow"></div>
+            <span class="card-icon">🗡️</span>
+            <span class="card-label">ATAQUE</span>
+            <span id="atkVal" class="card-value">7</span>
+          </div>
+          <div class="stat-card">
+            <div class="card-glow"></div>
+            <span class="card-icon">🛡️</span>
+            <span class="card-label">DEFESA</span>
+            <span id="defVal" class="card-value">3</span>
+          </div>
+          <div class="stat-card">
+            <div class="card-glow"></div>
+            <span class="card-icon">💀</span>
+            <span class="card-label">ABATES</span>
+            <span id="killsVal" class="card-value">0</span>
+          </div>
+          <div class="stat-card">
+            <div class="card-glow"></div>
+            <span class="card-icon">🏆</span>
+            <span class="card-label">PONTUAÇÃO</span>
+            <span id="scoreVal" class="card-value">0</span>
+          </div>
+        </div>
+
+        <!-- Bússola Tática Virtual (D-Pad de Pedra) -->
+        <div class="panel-section dpad-section">
+          <span class="dpad-label">BÚSSOLA DE MOVIMENTO</span>
+          <div class="dpad-grid">
+            <div></div>
+            <button id="btnUp" class="dpad-btn" title="Cima (W)">▲</button>
+            <div></div>
+            <button id="btnLeft" class="dpad-btn" title="Esquerda (A)">◀</button>
+            <button id="btnWait" class="dpad-btn dpad-center" title="Aguardar Turno (Espaço)">●</button>
+            <button id="btnRight" class="dpad-btn" title="Direita (D)">▶</button>
+            <div></div>
+            <button id="btnDown" class="dpad-btn" title="Baixo (S)">▼</button>
+            <div></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Centro: O Portal da Masmorra & Comandos Final Fantasy -->
+      <section class="canvas-wrapper">
+        <!-- Barra de Vida do Chefe (Boss Bar Monumental) -->
+        <div id="bossBarContainer" class="boss-bar-container hidden">
+          <div class="boss-header">
+            <span id="bossIcon" class="boss-icon">💀</span>
+            <div class="boss-info">
+              <span id="bossName" class="boss-name">Lich Rei Esqueleto</span>
+              <span id="bossTitle" class="boss-title">Monarca da Cripta Profana</span>
+            </div>
+            <span id="bossHpText" class="boss-hp-text">150 / 150</span>
+          </div>
+          <div class="boss-hp-bar">
+            <div id="bossHpFill" class="boss-hp-fill"></div>
+            <div class="boss-hp-sheen"></div>
+          </div>
+        </div>
+
+        <div class="dungeon-altar-header">
+          <span class="altar-torch">🔥</span>
+          <span class="altar-title">CÂMARA DA PERDIÇÃO PROCEDURAL</span>
+          <span class="altar-torch">🔥</span>
+        </div>
+
+        <div class="canvas-frame">
+          <div class="frame-corner corner-tl"></div>
+          <div class="frame-corner corner-tr"></div>
+          <div class="frame-corner corner-bl"></div>
+          <div class="frame-corner corner-br"></div>
+          <canvas id="gameCanvas" width="800" height="576"></canvas>
+        </div>
+
+        <!-- Menu de Comandos Táticos Estilo Final Fantasy -->
+        <div class="ff-command-bar">
+          <div class="ff-bar-title">
+            <span>⚔️ MENU DE COMANDOS TÁTICOS</span>
+            <span class="ff-active-hint">Selecione uma ação ou use as teclas numéricas</span>
+          </div>
+          <div class="ff-commands-grid">
+            <button id="cmdAttack" class="ff-cmd-btn btn-attack" title="Atacar Inimigo Adjacente (Espaço)">
+              <span class="cmd-key"><kbd>Espaço</kbd></span>
+              <span class="cmd-icon">🗡️</span>
+              <span class="cmd-name">ATACAR</span>
+              <span class="cmd-cost">FÍSICO</span>
+            </button>
+            <button id="cmdFire" class="ff-cmd-btn btn-fire" title="Conjurar Firaga no Inimigo mais Próximo (6 MP)">
+              <span class="cmd-key"><kbd>1</kbd></span>
+              <span class="cmd-icon">🔥</span>
+              <span class="cmd-name">FIRAGA</span>
+              <span class="cmd-cost">6 MP</span>
+            </button>
+            <button id="cmdIce" class="ff-cmd-btn btn-ice" title="Conjurar Blizzaga no Inimigo mais Próximo (8 MP)">
+              <span class="cmd-key"><kbd>2</kbd></span>
+              <span class="cmd-icon">❄️</span>
+              <span class="cmd-name">BLIZZAGA</span>
+              <span class="cmd-cost">8 MP</span>
+            </button>
+            <button id="cmdThunder" class="ff-cmd-btn btn-thunder" title="Conjurar Thundaga em Cadeia (10 MP)">
+              <span class="cmd-key"><kbd>3</kbd></span>
+              <span class="cmd-icon">⚡</span>
+              <span class="cmd-name">THUNDAGA</span>
+              <span class="cmd-cost">10 MP</span>
+            </button>
+            <button id="cmdCure" class="ff-cmd-btn btn-cure" title="Conjurar Curaga em Si Mesmo (8 MP)">
+              <span class="cmd-key"><kbd>4</kbd></span>
+              <span class="cmd-icon">✨</span>
+              <span class="cmd-name">CURAGA</span>
+              <span class="cmd-cost">8 MP</span>
+            </button>
+            <button id="cmdDefend" class="ff-cmd-btn btn-defend" title="Postura Defensiva (-50% Dano, +4 MP)">
+              <span class="cmd-key"><kbd>E</kbd></span>
+              <span class="cmd-icon">🛡️</span>
+              <span class="cmd-name">DEFENDER</span>
+              <span class="cmd-cost">+4 MP</span>
+            </button>
+            <button id="cmdLimit" class="ff-cmd-btn btn-limit" title="Executar Omnislash quando a barra de Limite atingir 100%!">
+              <span class="cmd-key"><kbd>L</kbd></span>
+              <span class="cmd-icon">💥</span>
+              <span class="cmd-name">OMNISLASH</span>
+              <span id="limitStatusText" class="cmd-cost">0%</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Painel Lateral Direito: Crônicas e Bestiário -->
+      <aside class="panel log-panel">
+        <div class="panel-header-rune">
+          <span class="rune-symbol">ᚨ</span>
+          <span class="panel-tag">TOMO DE GUERRA</span>
+          <span class="rune-symbol">ᛋ</span>
+        </div>
+
+        <div class="panel-title">
+          <span>📜 CRÔNICAS DA MASMORRA</span>
+        </div>
+        <div id="combatLog" class="combat-log"></div>
+
+        <!-- Guia Tático / Bestiário -->
+        <div class="panel-section legend-section">
+          <div class="legend-title">GUIA DO BESTIÁRIO & ENTIDADES</div>
+          <div class="legend-grid">
+            <div class="legend-item"><span class="legend-symbol sym-player">@</span> Cavaleiro (Você)</div>
+            <div class="legend-item"><span class="legend-symbol sym-goblin">g</span> Goblin (Ágil)</div>
+            <div class="legend-item"><span class="legend-symbol sym-skeleton">s</span> Esqueleto (Resistente)</div>
+            <div class="legend-item"><span class="legend-symbol sym-ogre">O</span> Ogro (Brutal)</div>
+            <div class="legend-item"><span class="legend-symbol sym-boss">👑</span> CHEFE DE ANDAR (Monumental)</div>
+            <div class="legend-item"><span class="legend-symbol sym-potion">!</span> Poção de Cura</div>
+            <div class="legend-item"><span class="legend-symbol sym-chest">=</span> Baú com Tesouro</div>
+            <div class="legend-item"><span class="legend-symbol sym-stairs">&gt;</span> Escada Descendente</div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Modal de Game Over / Salão das Almas Perdidas (Permadeath) -->
+    <div id="gameOverModal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="tombstone-arch"></div>
+        <div class="modal-skull">💀</div>
+        <h2 class="modal-title">SUA JORNADA TERMINOU</h2>
+        <p class="modal-subtitle">As sombras do abismo devoraram sua coragem e selaram seu destino.</p>
+
+        <div class="modal-stats">
+          <div class="modal-stat-row">
+            <span>Profundeza Atingida:</span>
+            <strong id="finalFloor">1</strong>
+          </div>
+          <div class="modal-stat-row">
+            <span>Monstros Aniquilados:</span>
+            <strong id="finalKills">0</strong>
+          </div>
+          <div class="modal-stat-row">
+            <span>Turnos Sobrevividos:</span>
+            <strong id="finalTurns">0</strong>
+          </div>
+          <div class="modal-stat-row">
+            <span>Glória Conquistada:</span>
+            <strong id="finalScore">0</strong>
+          </div>
+        </div>
+
+        <button id="restartBtn" class="btn-primary">
+          <span class="btn-rune">⚔️</span>
+          <span>RENASCER NA MASMORRA [R]</span>
+          <span class="btn-rune">⚔️</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="src/main.js?v=20260912_ff_expansion"></script>
+</body>
+</html>
