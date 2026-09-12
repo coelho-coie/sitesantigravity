@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Explorar & Galeria — Lumina{% endblock %}
+
+{% block content %}
+<div class="explore-page anim-fade-in">
+  
+  <!-- Header de Exploração -->
+  <div class="explore-header">
+    <h2 style="font-size: 1.8rem; margin-bottom: 8px;">Explorar o Canvas Visual</h2>
+    <p style="color: var(--lumina-text-muted); font-size: 0.95rem;">
+      Descubra perspectivas de fotógrafos autorais, iluminações experimentais e técnicas analógicas ou digitais.
+    </p>
+  </div>
+
+  <!-- Barra de Filtros por Tags -->
+  <div class="explore-filter-bar">
+    <a href="{% url 'explore' %}" class="tag-badge {% if not current_tag and not query %}active{% endif %}">
+      ✦ Todas as Obras
+    </a>
+    {% for tag in tags %}
+      <a href="{% url 'explore' %}?tag={{ tag.slug }}" class="tag-badge {% if current_tag == tag.slug %}active{% endif %}">
+        #{{ tag.name }}
+      </a>
+    {% endfor %}
+  </div>
+
+  {% if query %}
+    <p style="color: var(--lumina-cyan); margin-bottom: 20px; font-weight: 500;">
+      Resultados encontrados para busca: "<strong>{{ query }}</strong>" ({{ posts.count }} fotos)
+    </p>
+  {% endif %}
+
+  <!-- Grid Masonry Responsivo -->
+  <div class="explore-masonry-grid">
+    {% for post in posts %}
+      <div class="gallery-tile" onclick="window.location.href='{% url 'post_detail' post.pk %}';">
+        <img src="{{ post.get_image }}" alt="{{ post.title|default:post.caption }}" loading="lazy">
+        <div class="gallery-overlay">
+          <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <img src="{{ post.author.profile.get_avatar }}" alt="{{ post.author.username }}" style="width: 26px; height: 26px; border-radius: var(--radius-full); object-fit: cover;">
+              <span style="font-weight: 600; font-size: 0.82rem; color: #ffffff;">@{{ post.author.username }}</span>
+            </div>
+            <span style="font-size: 0.85rem; font-weight: 600; color: var(--lumina-crimson);">
+              ❤️ {{ post.total_likes }}
+            </span>
+          </div>
+          {% if post.camera_model %}
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--lumina-cyan); margin-top: 6px;">
+              {{ post.camera_model }} • {{ post.lens_spec }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% empty %}
+      <div style="grid-column: 1 / -1; padding: 60px 20px; text-align: center; background: var(--lumina-glass); border-radius: var(--radius-lg); border: 1px solid var(--lumina-glass-border);">
+        <h3 style="margin-bottom: 10px;">Nenhuma fotografia encontrada</h3>
+        <p style="color: var(--lumina-text-muted); margin-bottom: 20px;">Tente pesquisar por outros termos como #cyberpunk, #street ou limpe o filtro.</p>
+        <a href="{% url 'explore' %}" class="btn-create-shot" style="display: inline-flex;">Ver Todas as Obras</a>
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

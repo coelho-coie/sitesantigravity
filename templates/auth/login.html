@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Entrar — Lumina{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper anim-fade-in">
+  <div class="auth-card">
+    
+    <div style="text-align: center; margin-bottom: 28px;">
+      <div style="font-size: 2.2rem; margin-bottom: 10px;">✦</div>
+      <h2 style="font-size: 1.65rem; margin-bottom: 6px;">Bem-vindo ao Lumina</h2>
+      <p style="color: var(--lumina-text-muted); font-size: 0.88rem;">
+        Entre na comunidade e explore o canvas estético.
+      </p>
+    </div>
+
+    <form method="POST" action="{% url 'login' %}">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label class="form-label" for="{{ form.username.id_for_label }}">Usuário</label>
+        {{ form.username }}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="{{ form.password.id_for_label }}">Senha</label>
+        {{ form.password }}
+      </div>
+
+      <button type="submit" class="btn-lumina-block" id="btn-submit-login">
+        Entrar no Lumina
+      </button>
+
+      <!-- Botão de preenchimento rápido para demonstração/teste -->
+      <div style="margin-top: 18px; padding: 12px; background: rgba(255, 255, 255, 0.03); border: 1px dashed var(--lumina-glass-border); border-radius: var(--radius-sm); text-align: center;">
+        <span style="font-size: 0.76rem; color: var(--lumina-text-muted); display: block; margin-bottom: 6px;">Conta de Demonstração Rápida:</span>
+        <button 
+          type="button" 
+          onclick="document.getElementById('id_username').value='lumina_demo'; document.getElementById('id_password').value='lumina123456';"
+          style="background: transparent; border: 1px solid var(--lumina-cyan); color: var(--lumina-cyan); padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; cursor: pointer;"
+        >
+          Preencher 'lumina_demo'
+        </button>
+      </div>
+
+      <div style="margin-top: 24px; text-align: center; font-size: 0.86rem; color: var(--lumina-text-muted);">
+        Ainda não tem conta no Lumina?
+        <a href="{% url 'register' %}" style="color: var(--lumina-cyan); font-weight: 600; margin-left: 4px;">Cadastre-se</a>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+{% endblock %}

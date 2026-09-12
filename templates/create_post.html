@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Publicar Novo Shot — Lumina{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper anim-fade-in" style="min-height: auto; padding: 20px 0;">
+
+  <div class="auth-card" style="max-width: 680px;">
+    
+    <div style="text-align: center; margin-bottom: 28px;">
+      <h2 style="font-size: 1.7rem; margin-bottom: 6px;">Publicar Obra no Canvas</h2>
+      <p style="color: var(--lumina-text-muted); font-size: 0.9rem;">
+        Compartilhe sua visão fotográfica, especificações técnicas e conceito com a comunidade Lumina.
+      </p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" id="create-post-form">
+      {% csrf_token %}
+
+      <!-- Container de Pré-visualização Dinâmica da Imagem -->
+      <div class="preview-container" id="preview-container">
+        <img id="image-preview" src="#" alt="Prévia do disparo">
+      </div>
+
+      <!-- Área Dropzone de Arquivo -->
+      <div class="dropzone-box" onclick="document.getElementById('id_image').click();">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">📷</div>
+        <div style="font-weight: 700; color: var(--lumina-text-title); margin-bottom: 4px;">
+          Selecione uma foto do seu dispositivo
+        </div>
+        <div style="font-size: 0.82rem; color: var(--lumina-text-muted);">
+          Formatos suportados: JPG, PNG, WEBP • Alta resolução recomendada
+        </div>
+        <div style="display: none;">
+          {{ form.image }}
+        </div>
+      </div>
+
+      <!-- Ou URL Direta -->
+      <div class="form-group">
+        <label class="form-label" for="{{ form.image_url.id_for_label }}">{{ form.image_url.label }}</label>
+        {{ form.image_url }}
+        {% if form.image_url.errors %}
+          <span style="color: var(--lumina-crimson); font-size: 0.78rem;">{{ form.image_url.errors.0 }}</span>
+        {% endif %}
+      </div>
+
+      <!-- Legenda do Post -->
+      <div class="form-group">
+        <label class="form-label" for="{{ form.caption.id_for_label }}">{{ form.caption.label }} *</label>
+        {{ form.caption }}
+        {% if form.caption.errors %}
+          <span style="color: var(--lumina-crimson); font-size: 0.78rem;">{{ form.caption.errors.0 }}</span>
+        {% endif %}
+      </div>
+
+      <!-- Hashtags -->
+      <div class="form-group">
+        <label class="form-label" for="{{ form.tags_string.id_for_label }}">{{ form.tags_string.label }}</label>
+        {{ form.tags_string }}
+        <div style="font-size: 0.76rem; color: var(--lumina-text-dim); margin-top: 4px;">
+          Separe com vírgulas. Exemplo: <code>cyberpunk, street, tokyo, leica</code>
+        </div>
+      </div>
+
+      <!-- Metadados EXIF e Câmera (Grid 2 Colunas) -->
+      <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--lumina-glass-border); border-radius: var(--radius-md); padding: 18px; margin-bottom: 24px;">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--lumina-cyan); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 14px;">
+          ⚙️ Telemetria & Especificações da Fotografia
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="{{ form.camera_model.id_for_label }}">{{ form.camera_model.label }}</label>
+            {{ form.camera_model }}
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="{{ form.lens_spec.id_for_label }}">{{ form.lens_spec.label }}</label>
+            {{ form.lens_spec }}
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="{{ form.shutter_speed.id_for_label }}">{{ form.shutter_speed.label }}</label>
+            {{ form.shutter_speed }}
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="{{ form.aperture.id_for_label }}">{{ form.aperture.label }}</label>
+            {{ form.aperture }}
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="{{ form.iso.id_for_label }}">{{ form.iso.label }}</label>
+            {{ form.iso }}
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="{{ form.location_name.id_for_label }}">{{ form.location_name.label }}</label>
+            {{ form.location_name }}
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-lumina-block">
+        ✦ Publicar no Lumina
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

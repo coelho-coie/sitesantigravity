@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Lumina — The Living Canvas{% endblock %}</title>
+  <meta name="description" content="Plataforma de arte visual, fotografia autoral e comunidade estética de criadores.">
+  
+  <!-- CSS Design System -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/animations.css' %}">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%237c3aed'/><path d='M30 70 L50 30 L70 70 Z' fill='%2306b6d4'/></svg>">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="lumina-header" id="navbar">
+    <div class="header-inner">
+      <!-- Brand Logo -->
+      <a href="{% url 'feed' %}" class="brand-logo" id="logo-link">
+        <div class="brand-icon">✦</div>
+        <div class="brand-name">Lumina<span>.art</span></div>
+      </a>
+
+      <!-- Search Input -->
+      <div class="search-container">
+        <form action="{% url 'explore' %}" method="GET" id="nav-search-form">
+          <span class="search-icon">🔍</span>
+          <input 
+            type="text" 
+            name="q" 
+            class="search-input" 
+            placeholder="Buscar fotógrafos, tags, estilos (ex: cyberpunk)..." 
+            value="{{ request.GET.q|default:'' }}"
+            id="nav-search-input"
+          >
+        </form>
+      </div>
+
+      <!-- Navigation Actions -->
+      <nav class="nav-actions">
+        <a href="{% url 'feed' %}" class="nav-link {% if request.resolver_match.url_name == 'feed' %}active{% endif %}" id="nav-feed">
+          <span>Feed</span>
+        </a>
+        <a href="{% url 'explore' %}" class="nav-link {% if request.resolver_match.url_name == 'explore' %}active{% endif %}" id="nav-explore">
+          <span>Explorar</span>
+        </a>
+
+        {% if user.is_authenticated %}
+          <a href="{% url 'create_post' %}" class="btn-create-shot" id="btn-create-post">
+            <span>+ Publicar</span>
+          </a>
+
+          <!-- User Avatar & Profile Link -->
+          <a href="{% url 'profile' user.username %}" class="user-avatar-pill" title="Meu Perfil (@{{ user.username }})" id="nav-profile">
+            <img src="{{ user.profile.get_avatar }}" alt="{{ user.username }}">
+          </a>
+          <a href="{% url 'logout' %}" class="nav-link" title="Encerrar Sessão" id="nav-logout" style="color: var(--lumina-text-dim);">
+            <span>Sair</span>
+          </a>
+        {% else %}
+          <a href="{% url 'login' %}" class="nav-link" id="nav-login">
+            <span>Entrar</span>
+          </a>
+          <a href="{% url 'register' %}" class="btn-create-shot" id="nav-register">
+            <span>Criar Conta</span>
+          </a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <!-- Flash Messages Notifications -->
+  {% if messages %}
+    <div class="flash-messages-container" id="flash-container">
+      {% for message in messages %}
+        <div class="flash-message flash-{{ message.tags }} anim-fade-in">
+          <span>{{ message }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Main Content Container -->
+  <main class="lumina-main-container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <div class="mobile-bottom-bar" id="mobile-nav">
+    <a href="{% url 'feed' %}" class="mobile-bottom-link {% if request.resolver_match.url_name == 'feed' %}active{% endif %}">🏠</a>
+    <a href="{% url 'explore' %}" class="mobile-bottom-link {% if request.resolver_match.url_name == 'explore' %}active{% endif %}">🧭</a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'create_post' %}" class="mobile-bottom-link" style="color: var(--lumina-cyan);">➕</a>
+      <a href="{% url 'profile' user.username %}" class="mobile-bottom-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">👤</a>
+    {% else %}
+      <a href="{% url 'login' %}" class="mobile-bottom-link">🔑</a>
+    {% endif %}
+  </div>
+
+  <!-- Global Footer -->
+  <footer class="lumina-footer">
+    <p>© 2026 Lumina Platform • The Living Canvas for Visual Creators • Desenvolvido com Django & Vanilla CSS</p>
+  </footer>
+
+  <!-- Core JavaScript -->
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
