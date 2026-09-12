@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}@{{ profile_user.username }} — Lumina Canvas{% endblock %}
+
+{% block content %}
+<div class="profile-page anim-fade-in">
+
+  <!-- Profile Hero Card -->
+  <section class="profile-hero-card">
+    
+    <div class="profile-avatar-wrapper">
+      <img src="{{ profile.get_avatar }}" alt="{{ profile_user.username }}" class="profile-avatar-large">
+    </div>
+
+    <div style="flex: 1;">
+      
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 8px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <h2 style="font-size: 1.6rem; color: var(--lumina-text-title);">
+            {{ profile_user.get_full_name|default:profile_user.username }}
+          </h2>
+          {% if profile.is_pro %}
+            <span class="badge-pro">PRO CREATOR</span>
+          {% elif profile.is_curator %}
+            <span class="badge-curator">CURADOR</span>
+          {% endif %}
+        </div>
+
+        <div>
+          {% if is_self %}
+            <a href="{% url 'profile_edit' %}" class="btn-create-shot" style="background: rgba(255, 255, 255, 0.08); box-shadow: none; border: 1px solid var(--lumina-glass-border);">
+              ⚙️ Editar Perfil
+            </a>
+          {% else %}
+            <button type="button" class="btn-create-shot" onclick="this.textContent = (this.textContent === 'Seguir' ? 'Seguindo' : 'Seguir');">
+              Seguir
+            </button>
+          {% endif %}
+        </div>
+      </div>
+
+      <div style="color: var(--lumina-text-muted); font-size: 0.92rem; margin-bottom: 12px;">
+        @{{ profile_user.username }} 
+        {% if profile.location %} • 📍 {{ profile.location }}{% endif %}
+      </div>
+
+      {% if profile.bio %}
+        <p style="font-size: 0.94rem; color: var(--lumina-text-body); margin-bottom: 14px; max-width: 600px; line-height: 1.5;">
+          {{ profile.bio }}
+        </p>
+      {% endif %}
+
+      {% if profile.website %}
+        <div style="font-size: 0.85rem; margin-bottom: 14px;">
+          🌐 <a href="{{ profile.website }}" target="_blank" rel="noopener noreferrer" style="color: var(--lumina-cyan); text-decoration: underline;">{{ profile.website }}</a>
+        </div>
+      {% endif %}
+
+      <!-- Estatísticas do Fotógrafo -->
+      <div class="profile-stats-row">
+        <div class="stat-item">
+          <span class="stat-number">{{ total_posts }}</span>
+          <span class="stat-label">Disparos</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ total_likes_received }}</span>
+          <span class="stat-label">Curtidas Recebidas</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">1.4k</span>
+          <span class="stat-label">Seguidores</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">380</span>
+          <span class="stat-label">Seguindo</span>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Galeria de Fotos do Perfil (Grid 3 Colunas) -->
+  <div style="border-top: 1px solid var(--lumina-glass-border); padding-top: 24px;">
+    <div style="font-size: 0.85rem; font-weight: 700; color: var(--lumina-text-title); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+      <span>✦ Publicações Autorais ({{ posts.count }})</span>
+    </div>
+
+    <div class="explore-masonry-grid">
+      {% for post in posts %}
+        <div class="gallery-tile" onclick="window.location.href='{% url 'post_detail' post.pk %}';">
+          <img src="{{ post.get_image }}" alt="{{ post.caption }}" loading="lazy">
+          <div class="gallery-overlay">
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+              <span style="font-size: 0.88rem; font-weight: 700; color: var(--lumina-crimson);">
+                ❤️ {{ post.total_likes }}
+              </span>
+              <span style="font-size: 0.85rem; font-weight: 600; color: #ffffff;">
+                💬 {{ post.total_comments }}
+              </span>
+            </div>
+            {% if post.camera_model %}
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--lumina-cyan); margin-top: 6px;">
+                {{ post.camera_model }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% empty %}
+        <div style="grid-column: 1 / -1; padding: 48px 20px; text-align: center; background: var(--lumina-glass); border-radius: var(--radius-lg); border: 1px solid var(--lumina-glass-border);">
+          <div style="font-size: 2rem; margin-bottom: 8px;">📷</div>
+          <h4 style="margin-bottom: 8px;">Nenhuma publicação ainda</h4>
+          <p style="color: var(--lumina-text-muted);">Este criador ainda não publicou fotografias no Lumina.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Editar Perfil — Lumina{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper anim-fade-in" style="min-height: auto; padding: 20px 0;">
+
+  <div class="auth-card" style="max-width: 580px;">
+    
+    <div style="text-align: center; margin-bottom: 24px;">
+      <h2 style="font-size: 1.6rem; margin-bottom: 6px;">Editar Perfil Artístico</h2>
+      <p style="color: var(--lumina-text-muted); font-size: 0.88rem;">
+        Atualize sua biografia, links de portfólio e identidade visual.
+      </p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div class="form-group">
+          <label class="form-label" for="{{ form.first_name.id_for_label }}">Nome</label>
+          {{ form.first_name }}
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="{{ form.last_name.id_for_label }}">Sobrenome</label>
+          {{ form.last_name }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="{{ form.email.id_for_label }}">E-mail</label>
+        {{ form.email }}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="{{ form.avatar.id_for_label }}">{{ form.avatar.label }}</label>
+        {{ form.avatar }}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="{{ form.avatar_url.id_for_label }}">{{ form.avatar_url.label }}</label>
+        {{ form.avatar_url }}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="{{ form.location.id_for_label }}">{{ form.location.label }}</label>
+        {{ form.location }}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="{{ form.website.id_for_label }}">{{ form.website.label }}</label>
+        {{ form.website }}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="{{ form.bio.id_for_label }}">{{ form.bio.label }}</label>
+        {{ form.bio }}
+      </div>
+
+      <button type="submit" class="btn-lumina-block">
+        Salvar Alterações
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

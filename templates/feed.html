@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Feed Principal — Lumina{% endblock %}
+
+{% block content %}
+<div class="feed-grid">
+
+  <!-- Left / Center Stream Column -->
+  <div class="feed-stream">
+
+    <!-- Stories Carousel -->
+    <section class="stories-card">
+      <div class="stories-track">
+        {% if user.is_authenticated %}
+          <div class="story-item" onclick="window.location.href='{% url 'create_post' %}';">
+            <div class="story-ring" style="background: var(--lumina-gradient-main);">
+              <img src="{{ user.profile.get_avatar }}" alt="{{ user.username }}" class="story-avatar">
+            </div>
+            <span class="story-name">+ Meu Shot</span>
+          </div>
+        {% endif %}
+
+        {% for story in stories %}
+          <div class="story-item" onclick="window.location.href='{% url 'profile' story.user.username %}';">
+            <div class="story-ring">
+              <img src="{{ story.user.profile.get_avatar }}" alt="{{ story.user.username }}" class="story-avatar">
+            </div>
+            <span class="story-name">@{{ story.user.username }}</span>
+          </div>
+        {% empty %}
+          <!-- Stories de demonstração visual se vazio -->
+          <div class="story-item">
+            <div class="story-ring">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&q=80" class="story-avatar" alt="Aria">
+            </div>
+            <span class="story-name">@aria_lens</span>
+          </div>
+          <div class="story-item">
+            <div class="story-ring">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80" class="story-avatar" alt="Kenji">
+            </div>
+            <span class="story-name">@kenji_raw</span>
+          </div>
+          <div class="story-item">
+            <div class="story-ring">
+              <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&q=80" class="story-avatar" alt="Elena">
+            </div>
+            <span class="story-name">@elena_art</span>
+          </div>
+          <div class="story-item">
+            <div class="story-ring">
+              <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&q=80" class="story-avatar" alt="Marcus">
+            </div>
+            <span class="story-name">@marcus_v</span>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Posts Stream -->
+    {% for post in posts %}
+      <article class="post-card anim-fade-in" id="post-{{ post.id }}">
+        
+        <!-- Post Header -->
+        <div class="post-header">
+          <div class="creator-info">
+            <a href="{% url 'profile' post.author.username %}">
+              <img src="{{ post.author.profile.get_avatar }}" alt="{{ post.author.username }}" class="creator-avatar">
+            </a>
+            <div class="creator-meta">
+              <div class="creator-name-row">
+                <a href="{% url 'profile' post.author.username %}" class="creator-name">
+                  {{ post.author.get_full_name|default:post.author.username }}
+                </a>
+                {% if post.author.profile.is_pro %}
+                  <span class="badge-pro">PRO</span>
+                {% elif post.author.profile.is_curator %}
+                  <span class="badge-curator">Curador</span>
+                {% endif %}
+              </div>
+              <span class="creator-handle">@{{ post.author.username }} • {{ post.location_name }}</span>
+            </div>
+          </div>
+          <span class="post-time">{{ post.created_at|timesince }} atrás</span>
+        </div>
+
+        <!-- Post Image -->
+        <div class="post-media-wrapper">
+          <a href="{% url 'post_detail' post.pk %}">
+            <img src="{{ post.get_image }}" alt="{{ post.title|default:post.caption }}" class="post-image" loading="lazy">
+          </a>
+        </div>
+
+        <!-- EXIF Telemetry Bar -->
+        <div class="exif-telemetry-bar">
+          {% if post.camera_model %}<span class="exif-chip">📷 {{ post.camera_model }}</span>{% endif %}
+          {% if post.lens_spec %}<span class="exif-chip">⚡ {{ post.lens_spec }}</span>{% endif %}
+          {% if post.shutter_speed %}<span class="exif-chip">⏱ {{ post.shutter_speed }}</span>{% endif %}
+          {% if post.aperture %}<span class="exif-chip">ƒ/{{ post.aperture }}</span>{% endif %}
+          {% if post.iso %}<span class="exif-chip">{{ post.iso }}</span>{% endif %}
+        </div>
+
+        <!-- Post Actions -->
+        <div class="post-actions-bar">
+          <div class="actions-left">
+            <button 
+              type="button" 
+              class="action-btn btn-like {% if post.id in user_liked_post_ids %}liked{% endif %}" 
+              data-post-id="{{ post.id }}"
+              title="Curtir publicação"
+            >
+              <span class="heart-icon">{% if post.id in user_liked_post_ids %}❤️{% else %}🤍{% endif %}</span>
+              <span class="like-count action-count">{{ post.total_likes }}</span>
+            </button>
+
+            <a href="{% url 'post_detail' post.pk %}#comments" class="action-btn" title="Comentários">
+              <span>💬</span>
+              <span class="action-count">{{ post.total_comments }}</span>
+            </a>
+
+            <button type="button" class="action-btn" onclick="navigator.clipboard.writeText(window.location.origin + '{% url 'post_detail' post.pk %}'); alert('Link copiado!');" title="Compartilhar">
+              <span>🔗</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Post Caption & Tags -->
+        <div class="post-caption-box">
+          <p class="post-caption-text">
+            <strong>@{{ post.author.username }}</strong> {{ post.caption }}
+          </p>
+
+          <!-- Tags -->
+          <div class="post-tags-row">
+            {% for tag in post.tags.all %}
+              <a href="{% url 'explore' %}?tag={{ tag.slug }}" class="hashtag-pill">#{{ tag.name }}</a>
+            {% endfor %}
+          </div>
+
+          {% if post.total_comments > 0 %}
+            <a href="{% url 'post_detail' post.pk %}" class="view-comments-link">
+              Ver todos os {{ post.total_comments }} comentários...
+            </a>
+          {% endif %}
+        </div>
+
+      </article>
+    {% empty %}
+      <div class="post-card" style="padding: 48px 24px; text-align: center;">
+        <h3 style="margin-bottom: 12px;">Nenhum disparo visual publicado ainda</h3>
+        <p style="color: var(--lumina-text-muted); margin-bottom: 24px;">Seja o primeiro a compartilhar uma fotografia autoral e inspirar a comunidade.</p>
+        {% if user.is_authenticated %}
+          <a href="{% url 'create_post' %}" class="btn-create-shot" style="display: inline-flex;">+ Publicar Primeiro Shot</a>
+        {% else %}
+          <a href="{% url 'login' %}" class="btn-create-shot" style="display: inline-flex;">Entrar para Publicar</a>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+  </div>
+
+  <!-- Right Sidebar Column -->
+  <aside class="lumina-sidebar">
+
+    <!-- Quick User Profile Snippet (if logged in) -->
+    {% if user.is_authenticated %}
+      <div class="sidebar-card">
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
+          <img src="{{ user.profile.get_avatar }}" alt="{{ user.username }}" style="width: 50px; height: 50px; border-radius: var(--radius-full); object-fit: cover;">
+          <div>
+            <div style="font-weight: 700; color: var(--lumina-text-title);">{{ user.get_full_name|default:user.username }}</div>
+            <div style="font-size: 0.82rem; color: var(--lumina-text-muted);">@{{ user.username }}</div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--lumina-glass-border); padding-top: 12px;">
+          <div style="text-align: center;">
+            <div style="font-weight: 700; color: var(--lumina-text-title);">{{ user.posts.count }}</div>
+            <div style="font-size: 0.72rem; color: var(--lumina-text-muted);">SHOTS</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-weight: 700; color: var(--lumina-text-title);">{{ user.likes.count }}</div>
+            <div style="font-size: 0.72rem; color: var(--lumina-text-muted);">CURTIDAS</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-weight: 700; color: var(--lumina-cyan);">PRO</div>
+            <div style="font-size: 0.72rem; color: var(--lumina-text-muted);">STATUS</div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Weekly Challenge / Prompt -->
+    <div class="sidebar-card" style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.15) 0%, rgba(6, 182, 212, 0.1) 100%); border-color: rgba(124, 58, 237, 0.3);">
+      <div style="font-size: 0.75rem; font-weight: 800; color: var(--lumina-cyan); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px;">DESAFIO DA SEMANA</div>
+      <h4 style="font-size: 1.1rem; margin-bottom: 8px;">Reflexos Cyber Noir</h4>
+      <p style="font-size: 0.84rem; color: var(--lumina-text-muted); margin-bottom: 14px;">Capture reflexos de luzes noturnas em asfalto molhado ou superfícies de vidro.</p>
+      <a href="{% url 'explore' %}?q=cyberpunk" class="btn-create-shot" style="font-size: 0.8rem; padding: 6px 14px; display: inline-flex;">Explorar Galeria</a>
+    </div>
+
+    <!-- Suggested Creators -->
+    <div class="sidebar-card">
+      <div class="sidebar-title">
+        <span>Criadores em Destaque</span>
+        <span style="font-size: 0.75rem; color: var(--lumina-cyan);">VER TODOS</span>
+      </div>
+      
+      {% for creator in suggested_creators %}
+        <div class="creator-suggestion-row">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="{{ creator.profile.get_avatar }}" alt="{{ creator.username }}" style="width: 38px; height: 38px; border-radius: var(--radius-full); object-fit: cover;">
+            <div>
+              <a href="{% url 'profile' creator.username %}" style="font-weight: 600; font-size: 0.88rem; color: var(--lumina-text-title); display: block;">
+                @{{ creator.username }}
+              </a>
+              <span style="font-size: 0.74rem; color: var(--lumina-text-muted);">{{ creator.posts.count }} publicações</span>
+            </div>
+          </div>
+          <button type="button" class="btn-follow-chip" onclick="this.textContent = (this.textContent === 'Seguir' ? 'Seguindo' : 'Seguir');">Seguir</button>
+        </div>
+      {% empty %}
+        <p style="font-size: 0.82rem; color: var(--lumina-text-muted);">Explore e descubra novos talentos visuais.</p>
+      {% endfor %}
+    </div>
+
+    <!-- Trending Tags Cloud -->
+    <div class="sidebar-card">
+      <div class="sidebar-title">
+        <span>Tendências Estéticas</span>
+      </div>
+      <div class="tags-cloud">
+        {% for tag in trending_tags %}
+          <a href="{% url 'explore' %}?tag={{ tag.slug }}" class="tag-badge">#{{ tag.name }}</a>
+        {% empty %}
+          <a href="{% url 'explore' %}?q=cyberpunk" class="tag-badge">#cyberpunk</a>
+          <a href="{% url 'explore' %}?q=minimalism" class="tag-badge">#minimalism</a>
+          <a href="{% url 'explore' %}?q=street" class="tag-badge">#streetphotography</a>
+          <a href="{% url 'explore' %}?q=monochrome" class="tag-badge">#monochrome</a>
+          <a href="{% url 'explore' %}?q=mediumformat" class="tag-badge">#mediumformat</a>
+        {% endfor %}
+      </div>
+    </div>
+
+  </aside>
+
+</div>
+{% endblock %}
