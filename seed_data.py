@@ -9,10 +9,16 @@ import sys
 import django
 
 if sys.platform == 'win32':
-    sys.stdout.reconfigure(encoding='utf-8')
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lumina_core.settings')
-django.setup()
+try:
+    django.setup()
+except Exception:
+    pass
 
 
 from django.contrib.auth.models import User
