@@ -1,25 +1,25 @@
 ---
 name: workflow_deploy
-description: Procedimento completo e checklist de deploy da aplicação Lumina na Vercel com WhiteNoise e SQLite Serverless
+description: Procedimento completo e checklist de deploy da aplicação Lumina na Vercel com Zero-Configuration e Git Deploy direto
 ---
 
-# Workflow Deploy: Publicação na Nuvem (Vercel)
+# Workflow Deploy: Publicação na Nuvem (Vercel Zero-Config)
 
-Este workflow detalha o checklist de pré-requisitos, estrutura de configuração e comandos para implantar a plataforma **Lumina Canvas** no ambiente serverless da **Vercel**.
+Este workflow detalha o checklist de pré-requisitos, estrutura de configuração e comandos para implantar a plataforma **Lumina Canvas** no ambiente serverless da **Vercel** sem arquivos de configuração legados.
 
 ---
 
 ## 1. Checklist de Pré-Requisitos (Pre-flight Checks)
 
-Antes de executar o comando de deploy, confirme os itens:
+Antes de realizar o deploy, confirme os itens:
 
-- [x] **Ponto de Entrada WSGI**: O arquivo [`api/index.py`](file:///c:/Users/Vitor/OneDrive/Desktop/Arquivos/VS+AntiGravity/Projeto07/api/index.py) exporta o manipulador `app = get_wsgi_application()`.
-- [x] **Configuração de Roteamento**: O arquivo [`vercel.json`](file:///c:/Users/Vitor/OneDrive/Desktop/Arquivos/VS+AntiGravity/Projeto07/vercel.json) direciona todas as requisições para `api/index.py`.
-- [x] **Otimização de Pacote**: O arquivo [`.vercelignore`](file:///c:/Users/Vitor/OneDrive/Desktop/Arquivos/VS+AntiGravity/Projeto07/.vercelignore) exclui pastas pesadas (`.venv/`, `__pycache__/`, `.git/`, `node_modules/`).
-- [x] **WhiteNoise Ativo**: `whitenoise.middleware.WhiteNoiseMiddleware` configurado em `settings.py` com compressão `CompressedManifestStaticFilesStorage`.
-- [x] **Suporte Serverless SQLite**: `settings.py` preparado para copiar o banco de dados pré-populado para o diretório efêmero `/tmp/db.sqlite3` em runtime quando `VERCEL=1`.
-- [x] **Coleta de Estáticos**: Executar `.\manage.ps1 collectstatic` para gerar os assets com hashes de cache no diretório `staticfiles/`.
-- [x] **Suíte de Testes**: Executar `.\manage.ps1 test` e garantir 100% de sucesso.
+- [x] **Ponto de Entrada WSGI Nativo**: `lumina_core/wsgi.py` configurado com `application` e alias `app`, além de garantir o diretório raiz no `sys.path`.
+- [x] **Zero-Configuration**: Arquivos legados `vercel.json` e `api/index.py` removidos para permitir detecção nativa do Django pela Vercel.
+- [x] **Otimização de Pacote**: O arquivo `.vercelignore` exclui pastas locais (`.venv/`, `__pycache__/`, `.git/`, `node_modules/`).
+- [x] **WhiteNoise Ativo**: `whitenoise.middleware.WhiteNoiseMiddleware` configurado em `settings.py` com compressão estática.
+- [x] **Suporte Serverless SQLite Gravável**: `settings.py` redireciona o banco SQLite para `/tmp/db.sqlite3` em execuções no Vercel (`IS_VERCEL`).
+- [x] **Auto-Migração e Seed**: `lumina_core/wsgi.py` executa migrações automáticas e seeding de dados no cold start com criação de flag `/tmp/.db_ready`.
+- [x] **Suporte a Banco Externo**: Suporte a `DATABASE_URL` via `dj-database-url` para PostgreSQL/Neon/Supabase.
 
 ---
 
@@ -29,41 +29,28 @@ Ao configurar o projeto no Vercel Dashboard, adicione as seguintes variáveis em
 
 | Variável | Valor Recomendado | Finalidade |
 |---|---|---|
-| `SECRET_KEY` | *(Gerar chave de 50 caracteres aleatórios)* | Proteção criptográfica de sessões e CSRF |
-| `DEBUG` | `False` | Desativa telas de erro detalhadas em produção |
+| `DJANGO_SECRET_KEY` | *(Gerar chave de 50 caracteres)* | Proteção criptográfica de sessões e CSRF (com fallback automático se ausente) |
+| `DJANGO_DEBUG` | `False` | Desativa telas de erro detalhadas em produção |
 | `ALLOWED_HOSTS` | `.vercel.app,localhost,127.0.0.1` | Hosts permitidos para o Django responder |
-| `VERCEL` | `1` | Ativa o modo de banco de dados em `/tmp/` |
+| `DATABASE_URL` | *(Opcional)* | Conexão para Postgres externo |
 
 ---
 
-## 3. Comandos de Deploy via Vercel CLI
+## 3. Fluxo de Deploy via Git (Padrão Recomendado)
 
-### Opção A: Deploy de Visualização (Preview)
-Gera uma URL de homologação temporária para testar as alterações antes do ambiente de produção:
-```powershell
-npx vercel
-```
+A Vercel realiza o build e deploy automaticamente a cada `git push`:
 
-### Opção B: Deploy Oficial de Produção
-Publica diretamente no domínio principal do projeto:
-```powershell
-npx vercel --prod
-```
-
-### Opção C: Inspeção de Logs em Tempo Real
-Para verificar tracebacks ou requisições na nuvem:
-```powershell
-npx vercel logs
+```bash
+git add .
+git commit -m "refactor: adequacao lumina para vercel zero-config"
+git push origin main
 ```
 
 ---
 
 ## 4. Resolução de Falhas Comuns no Vercel
 
-- **Erro `500 Server Error` na primeira carga**:
-  - Verifique se a variável `SECRET_KEY` foi cadastrada no painel da Vercel.
-  - Verifique se `ALLOWED_HOSTS` inclui `.vercel.app`.
-- **Estáticos sem estilo (CSS 404)**:
-  - Certifique-se de que os arquivos foram gerados na pasta `staticfiles/` antes do deploy com `.\manage.ps1 collectstatic`.
-- **Erro de escrita no banco de dados (`database is locked` / `readonly database`)**:
-  - Na Vercel, o sistema de arquivos raiz é estritamente somente leitura. O projeto Lumina contorna isso redirecionando o SQLite para `/tmp/db.sqlite3` quando detecta a variável `VERCEL=1`.
+- **Erro `550 / FUNCTION_INVOCATION_FAILED`**:
+  - Eliminado pela remoção do `vercel.json` (que continha builds legados `@vercel/python`) e pelo redirecionamento do SQLite para o caminho gravável `/tmp/db.sqlite3`.
+- **Erro `no such table` na primeira carga**:
+  - Resolvido pela rotina em `lumina_core/wsgi.py` que executa automaticamente `migrate` e `seed_data.run_seed()` no cold start da função serverless.

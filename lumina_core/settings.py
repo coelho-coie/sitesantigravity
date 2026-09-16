@@ -20,10 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Carregar variáveis do .env
 load_dotenv(BASE_DIR / '.env')
 
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY') or os.getenv('SECRET_KEY')
+# Suporte ao ambiente Serverless da Vercel
+IS_VERCEL = os.getenv('VERCEL') == '1' or 'VERCEL' in os.environ
+
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY') or os.getenv('SECRET_KEY') or 'django-insecure-lumina-fallback-prod-secret-key-change-in-dashboard'
 
 # Em ambiente Vercel o padrão é DEBUG=False; localmente mantém DEBUG=True se não especificado
-if os.getenv('VERCEL') == '1':
+if IS_VERCEL:
     DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() in ('true', '1')
 else:
     DEBUG = os.getenv('DJANGO_DEBUG', 'True').lower() in ('true', '1')
@@ -91,10 +94,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'lumina_core.wsgi.application'
 
-# Suporte ao ambiente Serverless da Vercel (onde apenas /tmp é gravável)
-IS_VERCEL = os.getenv('VERCEL', '0') == '1'
-
+# Configuração de Banco de Dados Serverless / Local
 if IS_VERCEL:
+    # No Vercel, o sistema de arquivos da aplicação é read-only; o banco SQLite deve residir em /tmp/
     import shutil
     tmp_db = Path('/tmp/db.sqlite3')
     orig_db = BASE_DIR / 'db.sqlite3'
@@ -103,7 +105,7 @@ if IS_VERCEL:
             shutil.copy2(orig_db, tmp_db)
         except Exception:
             pass
-    db_path = tmp_db if tmp_db.exists() else orig_db
+    db_path = tmp_db
 else:
     db_path = BASE_DIR / 'db.sqlite3'
 
@@ -113,6 +115,19 @@ DATABASES = {
         'NAME': db_path,
     }
 }
+
+# Suporte opcional a DATABASE_URL para bancos relacionais no Vercel (Postgres/Neon/Supabase)
+DATABASE_URL = os.getenv('DATABASE_URL')
+if DATABASE_URL:
+    try:
+        import dj_database_url
+        DATABASES['default'] = dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    except ImportError:
+        pass
 
 
 AUTH_PASSWORD_VALIDATORS = [

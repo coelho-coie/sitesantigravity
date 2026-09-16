@@ -1,84 +1,58 @@
-# Guia de Deploy no Vercel — Lumina Platform (Django)
+# Guia de Deploy no Vercel Zero-Configuration — Lumina Platform (Django)
 
-Este documento descreve a preparação arquitetural e o passo a passo para publicação da aplicação Django **Lumina** no **Vercel** usando Serverless Functions Python.
+Este documento descreve a arquitetura moderna Zero-Configuration e o fluxo de publicação contínua da aplicação Django **Lumina** na **Vercel** usando Serverless Functions Python via Git Deploy direto.
 
 ---
 
-## 1. Arquitetura Serverless Configurada
+## 1. Arquitetura Serverless Zero-Config
 
-A aplicação foi preparada especificamente para o ambiente serverless da Vercel:
+A aplicação utiliza detecção nativa do Django pela Vercel, dispensando arquivos de configuração legados (`vercel.json` e `api/index.py`):
 
-| Componente | Arquivo de Configuração | Função |
+| Componente | Localização | Função |
 |---|---|---|
-| **Entrypoint WSGI** | [`api/index.py`](file:///c:/Users/Vitor/OneDrive/Desktop/Arquivos/VS+AntiGravity/Projeto07/api/index.py) | Expõe a variável `app = get_wsgi_application()` consumida pelo runtime `@vercel/python`. |
-| **Roteamento Vercel** | [`vercel.json`](file:///c:/Users/Vitor/OneDrive/Desktop/Arquivos/VS+AntiGravity/Projeto07/vercel.json) | Roteia `/static/` diretamente para arquivos estáticos e todas as demais rotas para `api/index.py`. |
-| **Otimização de Payload** | [`.vercelignore`](file:///c:/Users/Vitor/OneDrive/Desktop/Arquivos/VS+AntiGravity/Projeto07/.vercelignore) | Evita o upload desnecessário de `.venv/`, `.git/`, logs e caches. |
-| **Serviço de Estáticos** | `WhiteNoise 6.12.0` | Integrado ao Django para servir CSS/JS diretamente com compressão e manifesto. |
-| **Banco de Dados Serverless** | [`lumina_core/settings.py`](file:///c:/Users/Vitor/OneDrive/Desktop/Arquivos/VS+AntiGravity/Projeto07/lumina_core/settings.py) | Cópia automática do banco SQLite para o diretório gravável `/tmp/db.sqlite3` em execuções no Vercel. |
+| **Entrypoint WSGI Nativo** | `lumina_core/wsgi.py` | Detectado nativamente pela Vercel via `manage.py`; expõe `application` e alias `app`. |
+| **Auto-Migração & Seed** | `lumina_core/wsgi.py` | Detecta ambiente Serverless (`VERCEL=1`), executa `migrate` e `seed_data.run_seed()` no cold start e marca `/tmp/.db_ready`. |
+| **Banco SQLite Gravável** | `lumina_core/settings.py` | Como o sistema de arquivos `/var/task` é read-only, redireciona o SQLite automaticamente para `/tmp/db.sqlite3`. |
+| **Suporte Opcional a PostgreSQL** | `lumina_core/settings.py` | Suporte nativo a `DATABASE_URL` via `dj-database-url` (Neon, Supabase, Vercel Postgres). |
+| **Serviço de Estáticos** | `WhiteNoise 6.6+` | Integrado ao pipeline do Django para servir CSS/JS com compressão `CompressedStaticFilesStorage`. |
+| **Otimização de Pacote** | `.vercelignore` | Ignora ambientes locais (`.venv/`), caches e arquivos desnecessários no deploy. |
 
 ---
 
 ## 2. Checklist Pré-Deploy
 
-- [x] Suíte de testes unitários passando: `8/8 OK`
-- [x] Coleta de arquivos estáticos testada: `python manage.py collectstatic --noinput`
-- [x] Dependências listadas em `requirements.txt` (incluindo `whitenoise`)
-- [x] `ALLOWED_HOSTS` configurado para aceitar domínios `.vercel.app`
-- [x] `api/index.py` e `vercel.json` criados e testados
+- [x] Arquitetura Zero-Configuration: `vercel.json` e `api/` legados removidos.
+- [x] Suporte a fallback seguro de `SECRET_KEY` configurado em `settings.py`.
+- [x] Redirecionamento e migração automática do banco de dados em `/tmp/` no cold-start do Vercel.
+- [x] Dependências declaradas em `requirements.txt` (incluindo `whitenoise` e `dj-database-url`).
+- [x] `ALLOWED_HOSTS` configurado com suporte a `.vercel.app`.
 
 ---
 
-## 3. Métodos de Deploy
+## 3. Fluxo de Deploy via Git (Recomendado)
 
-### Opção A: Deploy via Vercel CLI (Direto pelo Terminal)
-
-1. **Efetuar Login na Vercel:**
-   ```powershell
-   npx vercel login
-   ```
-   *Siga as instruções exibidas no navegador para autorizar o terminal.*
-
-2. **Gerar Preview Deployment (Recomendado):**
-   ```powershell
-   npx vercel
-   ```
-   *Responda às perguntas interativas para vincular ao seu projeto na Vercel.*
-
-3. **Deploy de Produção:**
-   ```powershell
-   npx vercel --prod
-   ```
-
----
-
-### Opção B: Deploy via Integração Git (Recomendado para Produção Contínua)
-
-1. Crie um repositório no seu GitHub (ex: `lumina-platform`).
-2. Adicione o remote e faça o push do código:
+1. Faça o commit das alterações no seu repositório:
    ```bash
-   git remote add origin https://github.com/SEU_USUARIO/lumina-platform.git
    git add .
-   git commit -m "feat: prepara projeto para deploy no Vercel"
-   git push -u origin main
+   git commit -m "refactor: adequacao lumina para vercel zero-config"
+   git push origin main
    ```
-3. Acesse o **Dashboard da Vercel** ([vercel.com](https://vercel.com)):
-   - Clique em **"Add New..."** → **"Project"**.
-   - Importe o repositório `lumina-platform`.
-   - Em **Environment Variables**, adicione:
-     - `DJANGO_SECRET_KEY`: `sua-chave-secreta-de-producao`
-     - `DJANGO_DEBUG`: `False`
-     - `ALLOWED_HOSTS`: `.vercel.app`
-   - Clique em **"Deploy"**.
+
+2. No painel da **Vercel** ([vercel.com](https://vercel.com)):
+   - Se o projeto já estiver conectado ao repositório Git, o deploy iniciará **automaticamente**.
+   - Caso seja um novo projeto: clique em **"Add New..." → "Project"**, selecione o repositório e clique em **Deploy**.
+
+3. O Vercel detectará o Django automaticamente através do `manage.py` e fará o build sem necessidade de parâmetros adicionais.
 
 ---
 
 ## 4. Variáveis de Ambiente no Vercel
 
-Configure no painel da Vercel (*Project Settings → Environment Variables*):
+Configuráveis no painel da Vercel (*Project Settings → Environment Variables*):
 
 | Variável | Valor Recomendado | Finalidade |
 |---|---|---|
-| `DJANGO_SECRET_KEY` | *(chave aleatória longa)* | Criptografia de sessões e CSRF em produção |
-| `DJANGO_DEBUG` | `False` | Desativa modo de depuração para segurança |
-| `ALLOWED_HOSTS` | `.vercel.app` | Domínios autorizados a receber requisições |
-| `VERCEL` | `1` | Ativa rotinas serverless automáticas |
+| `DJANGO_SECRET_KEY` | *(chave aleatória segura)* | Chave de criptografia de sessões e CSRF |
+| `DJANGO_DEBUG` | `False` | Desativa modo de depuração em produção |
+| `ALLOWED_HOSTS` | `.vercel.app` | Domínios autorizados |
+| `DATABASE_URL` | *(opcional)* | Conexão para banco de dados relacional externo (Neon/Postgres/Supabase) |
