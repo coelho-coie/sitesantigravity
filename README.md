@@ -1,3 +1,27 @@
+<h1 align="center">🚀 Curso Antigravity — Sites</h1>
+
+<p align="center">
+  Projetos do curso Antigravity: cada site vive em uma branch própria.<br>
+  <sub>Você está vendo a branch <code>sitelumina</code>.</sub>
+</p>
+
+<p align="center">
+  <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white">
+  <img alt="Django" src="https://img.shields.io/badge/Django-092E20?style=flat&logo=django&logoColor=white">
+  <img alt="Flask" src="https://img.shields.io/badge/Flask-000000?style=flat&logo=flask&logoColor=white">
+  <img alt="React" src="https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB">
+  <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black">
+</p>
+
+| Branch | Projeto | Tecnologias |
+|---|---|---|
+| [`sitelumina`](https://github.com/coelho-coie/sitesantigravity/tree/sitelumina) | 📸 Lumina — plataforma para fotógrafos, visual dark glassmorphism | Django |
+| [`siteironman`](https://github.com/coelho-coie/sitesantigravity/tree/siteironman) | ⚡ Portal de curiosidades do Homem de Ferro | Django REST + React (Vite) |
+| [`siterouguelike`](https://github.com/coelho-coie/sitesantigravity/tree/siterouguelike) | 🎮 Dungeon Roguelike em turnos | JavaScript puro + Canvas |
+| [`master`](https://github.com/coelho-coie/sitesantigravity/tree/master) | 🏰 Castelos & Ruínas — gestão de fortalezas | Flask |
+
+---
+
 # Lumina — The Living Canvas (Django & Stitch Web Platform)
 
 > **Plataforma Web autoral de prestígio para fotógrafos, artistas visuais e criadores de estética.**
